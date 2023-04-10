@@ -11,6 +11,13 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 
+//database query config (we initilze database and rows with sequelize and we query data with mysql)
+const makeQuery = mysql.createConnection({
+    host : process.env.MYSQL_HOST,
+    database : process.env.MYSQL_DBNAME,
+    user : process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASS,
+})
 
 
 // Middlwares
@@ -26,30 +33,34 @@ const limitApiCall = expressRateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
 
- 
-app.get("/createDB", (req, res) => { 
-    const query = "CREATE DATABASE ecommers_website";
-    DB.query(query, (err, result) => {
-        if(err) throw err
-        res.send("database created");
-    })
-});
 
  
 app.get("/rateLimit", limitApiCall, (req, res) => {
     res.send("sup");
 })
-
+ 
 
 app.get("/image/:id", (req, res) => {
     const {id} = req.params;
-    const query = `Select fileData From products Where fileName=${id}`;
-    db.query(query, (err, result) => {
+    const query = "Select * From products";
+    makeQuery.query(query,(err, result) => {
         if(err) throw err
-        console.log(result);
-        res.send(result);
+        console.log(result[0].fileData);
+        res.send(result[0].fileData);
     })
 })  
+
+
+app.get("/api/products", (req, res) => {
+    const query = "select * FROM products";
+
+    makeQuery.query(query, (err, result) => {
+        if(err) throw err;
+        console.log(result)
+        res.send(result)
+    })
+})
+
 
 app.post("/api/new-product", (req, res) => {
     const {productName} = req.body;
@@ -62,6 +73,18 @@ app.post("/api/new-product", (req, res) => {
     const newFileName = uuid() + fileName.slice(-5);
     addProduct(productName, price, visible, productDesc, fileData, newFileName);
     res.json({ imgUrl : newFileName});
-})  
+});
+
+app.get("/get-product/:key", (req, res) => {
+    const {key} = req.params;
+    console.log("*".repeat(30),key);
+    const query = `SELECT * FROM products where key=${key}`;
+
+    makeQuery.query(query, (err, result) => {
+        if(err) throw err
+        console.log(result);
+        res.send(result);
+    })
+})
  
 app.listen(PORT, console.log(`listenning on port ${PORT}`));

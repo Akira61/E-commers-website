@@ -8,7 +8,8 @@ const db = new Sequelize(
     process.env.MYSQL_PASS,
     {
         dialect : "mysql",
-        host : process.env.MYSQL_HOST
+        host : process.env.MYSQL_HOST,
+       
     }
 );
  
