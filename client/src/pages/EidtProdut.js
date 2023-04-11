@@ -5,13 +5,12 @@ export default function EidtProdut() {
 
     const {id} = useParams();
     
-        const [info, setInfo] = useState({});
 
     //onChange variables
-    const [name, setName] = useState(info.name);
-    const [price, setPrice] = useState(info.price);
-    const [visible, setVisible] = useState(info.visible);
-    const [description, setDescription] = useState(info.description);
+    const [name, setName] = useState();
+    const [price, setPrice] = useState();
+    const [visible, setVisible] = useState();
+    const [description, setDescription] = useState();
     const [fileData, setFileData] = useState();
 
     //get image from server
@@ -24,7 +23,12 @@ export default function EidtProdut() {
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-                setInfo(data);
+            
+                setName(data.name);
+                setPrice(data.price);
+                setVisible(data.visible);
+                setDescription(data.description);
+                setFileData(data.fileData)
 
                 // get image
                 getImg(data.fileName);
@@ -69,64 +73,16 @@ export default function EidtProdut() {
   return (
     <div> 
         <img src={image} width="200"/>
-      <input type="text" defaultValue={info.name} onChange={e => setName(e.target.value)}/>
-        <input type='number' defaultValue={info.price} onChange={e => setPrice(e.target.value)}/>
-        <textarea  id="" cols="30" rows="10" defaultValue={info.description} onChange={e => setDescription(e.target.value)}></textarea>
+      <input type="text" value={name} onChange={e => setName(e.target.value)}/>
+        <input type='number' value={price} onChange={e => setPrice(e.target.value)}/>
+        <textarea  id="" cols="30" rows="10" value={description} onChange={e => setDescription(e.target.value)}></textarea>
         <input type="file" id="" />
-        <input type='checkbox' defaultValue={info.visible} /*checked={info.visible}*/ onChange={e => setVisible(e.target.value)}/>
+        <input type='checkbox' checked={visible} /*checked={info.visible}*/ onChange={e => setVisible(e.target.checked)}/>
+        <Link to='/products-dashbord'>
         <button type='submit' onClick={() => updateData()}>update</button>
         <button onClick={() => deleteProduct()}>Delete product</button>
+        </Link>
     </div>
   )
 }
 
-
-
-
-
-// const {id} = useParams();
-
-//     const [name, setName] = useState();
-//     const [price, setPrice] = useState();
-//     const [desc, setDesc] = useState();
-//     const [Visible, setVisible] = useState();
-//     const [image, setImage] = useState();
-
-//     // onChange variables
-//     const [proudct, setProduct] = useState({});
-//     const [updateName , setUpadteName] = useState();
-//     const [updatePrice , setUpadtePrice] = useState();
-//     const [updateDesc , setUpadteDesc] = useState();
-//     const [updateVisible , setUpadteVisible] = useState();
-//     const [updateImage , setUpadteImage] = useState();
-
-//     useEffect(() => {
-//         fetch( `http://localhost:4000/get-product/${id}`)
-//         .then(res => res.json())
-//         .then(data => {
-//             console.log(data);
-//             setProduct(data);
-//             setName(data.name);
-//             setPrice(data.price);
-//             setDesc(data.description);
-//             setVisible(data.visible);
-//             setImage(data.fileData);
-//         })
-//     },[]);
-
-//     function update(){
-//         console.log("update sent");
-//         fetch("http://localhost:4000/update-product/?", id,{
-//             method : "put",
-//             headers :{'Content-Type': 'application/json'},
-//             body : JSON.stringify({name: updateName, price: updatePrice, visible: updateVisible, description : updateDesc, image: updateImage})
-//         }).then(res => console.log(res));
-//     };
-
-
-//     function deleteProduct(){
-//         fetch("http://localhost:4000/delete-product/?", id,{
-//             method : "delete",
-//             headers :{'Content-Type': 'application/json'},
-//         }).then(res => console.log(res));
-//     }

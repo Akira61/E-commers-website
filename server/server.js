@@ -122,7 +122,7 @@ app.put("/update-product/:product_id", (req, res) => {
         if (err) throw err
         console.log(result);
         res.send(result);
-    })
+    }) 
 })
   
 app.listen(PORT, console.log(`listenning on port ${PORT}`));
