@@ -4,7 +4,7 @@ const {v4 : uuid} = require("uuid");
 
 const newProduct = db.define("products", {
     
-    key: {
+    product_id: {
         type : DataTypes.STRING,
         allowNull : false
     },
@@ -31,19 +31,19 @@ const newProduct = db.define("products", {
     }
 });
 
- 
+  
 function addProduct(name, price, visible, description, fileData, fileName){
     // create the table
     db.sync();
     //create product
-    newProduct.create({key : uuid(),name, price, visible, description, fileData, fileName}).then((result) => {
+    newProduct.create({product_id : uuid(),name, price, visible, description, fileData, fileName}).then((result) => {
         console.log("product added successfully! ", result)
     }).catch(err => {
         console.log({"adding product error " : err})
     })
 }
-
-
+ 
+ 
 module.exports.addProduct = addProduct;
 
 

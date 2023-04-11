@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const mysql = require("mysql");
 // const {addProduct} = require("./database/models/new.product");
@@ -18,7 +19,7 @@ const makeQuery = mysql.createConnection({
     user : process.env.MYSQL_USER,
     password: process.env.MYSQL_PASS,
 })
-
+ 
 
 // Middlwares
 app.use(express.json({limit : '50mb'}));
@@ -33,23 +34,25 @@ const limitApiCall = expressRateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
 
-
+ 
  
 app.get("/rateLimit", limitApiCall, (req, res) => {
     res.send("sup");
 })
- 
+  
 
 app.get("/image/:id", (req, res) => {
     const {id} = req.params;
-    const query = "Select * From products";
-    makeQuery.query(query,(err, result) => {
+    console.log(id)
+    const query = "Select * From products where fileName=?";
+    makeQuery.query(query,id,(err, result) => {
         if(err) throw err
+        console.log(result);
         console.log(result[0].fileData);
         res.send(result[0].fileData);
     })
 })  
-
+  
 
 app.get("/api/products", (req, res) => {
     const query = "select * FROM products";
@@ -74,17 +77,52 @@ app.post("/api/new-product", (req, res) => {
     addProduct(productName, price, visible, productDesc, fileData, newFileName);
     res.json({ imgUrl : newFileName});
 });
-
+ 
 app.get("/get-product/:key", (req, res) => {
     const {key} = req.params;
     console.log("*".repeat(30),key);
-    const query = `SELECT * FROM products where key=${key}`;
-
-    makeQuery.query(query, (err, result) => {
+    const query = "SELECT * FROM products where product_id= ?";
+            
+    makeQuery.query(query,key, (err, result) => {
         if(err) throw err
+
+        const b64 = Buffer.from(result[0].fileData).toString("base64");
+        const extention = path.extname(result[0].fileName);
+        console.log(extention)
+        const image = `data:image/${extention.slice(1)};base64,${b64}`;
+       // result[0].fileData = image;
+        console.log(result[0]);
+        res.send(result[0]);
+    })
+}) 
+
+
+app.delete("/delete-product/:product_id", (req, res) => {
+    const {product_id} = req.params;
+    const query = "DELETE FROM products WHERE product_id=?";
+    makeQuery.query(query,product_id, (err, result) => {
+        if(err) throw err;
+        console.log(result);
+        res.send("product deleted successfully!");
+    } )
+})
+
+app.put("/update-product/:product_id", (req, res) => {
+    const {product_id} = req.params;
+    const {name} = req.body;
+    const {price} = req.body;
+    const {description} = req.body;
+    const {visible} = req.body;
+    const {fileData} = req.body;
+    console.log("put ".repeat(40))
+    const query = "UPDATE products SET name=? , price=?, description=?, visible=? WHERE product_id=?";
+
+    const variables = [name, price, description, visible, product_id];
+    makeQuery.query(query, variables, (err, result) => {
+        if (err) throw err
         console.log(result);
         res.send(result);
     })
 })
- 
+  
 app.listen(PORT, console.log(`listenning on port ${PORT}`));

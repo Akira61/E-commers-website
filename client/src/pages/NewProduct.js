@@ -40,11 +40,19 @@ export default function NewProduct() {
 
   return (
     <div>
+      <label>proudct name : </label>
         <input type="text" value={productName}   onChange={(e) => setProductName(e.target.value)}/>
+        <label>price : </label>
         <input type='number' onChange={(e) => setPrice(e.target.value)}/>
+        <br />
+        <label>description : </label>
         <textarea  id="" cols="30" rows="10" value={productDesc} onChange={(e) => setProductDesc(e.target.value)}></textarea>
+        <br />
         <input type="file" id="" onChange={(e) => setProductImg(e.target.files[0])}/>
+        <label>visible ? </label>
+        <br />
         <input type='checkbox' checked={visible} onChange={(e) => setVisible(e.target.checked)}/>
+        <br />
         <Link to="/products-dashbord"><button onClick={() => newProduct()}>upload</button></Link>
         <Link to={resLink}>see image</Link>
     </div>

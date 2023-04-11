@@ -10,6 +10,7 @@ export default function Products() {
   const [desc, setDesc] = useState();
   const [image, setImage] = useState();
 
+  const [getImg, setGetImg] = useState();
   useEffect(() => {
 
     fetch("http://localhost:4000/api/products")
@@ -19,11 +20,13 @@ export default function Products() {
       setData(data)
     })
 
+    
   },[])
-
+  
+  
   function parseImg(img) {
-    const buf = new Buffer(img.data, 'binary')
-    const image = new Image().src = buf
+
+    return <td><img src={`data:image/jpg;base64,${image}`} style={{width:'50%', objectFit:'cover'}}/></td>
     console.log(img.data)
     return image;
   }
@@ -44,13 +47,12 @@ export default function Products() {
             </tr>
               {data.map(element => (
                 <tr style={{background : "gray"}}>
-
-                    <td><img src={element.fileData} style={{width:'50%', objectFit:'cover'}}/></td>
+                    <td><img src={new Image().src= new Text(element.fileData)} style={{width:'50%', objectFit:'cover'}}/></td>
                     <td>{element.name}</td>
                     <td><span>{element.price}</span></td>
                     <td>{element.description}</td>
                     <td><input type="checkbox" checked={element.visible}/> <label>Visible</label></td>
-                    <td><a href={`/edit-product/${element.key}`}><button>Edit</button></a></td>
+                    <td><a href={`/edit-product/${element.product_id}`}><button>Edit</button></a></td>
                     
                 </tr>
                 
