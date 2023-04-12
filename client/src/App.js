@@ -4,6 +4,8 @@ import Products from './pages/Products';
 import NewProduct from './pages/NewProduct';
 import GetProductImage from './pages/GetProductImage';
 import EidtProdut from './pages/EidtProdut';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/image/:id" element={<GetProductImage />}/>
         <Route path='/products-dashbord' element={<Products />} />
         <Route path='/edit-product/:id' element={<EidtProdut />} />
+        <Route path='/register' element={<Register />}/>
+        <Route path='/login' element={<Login />}/>
       </Routes>
     </div>
   );
