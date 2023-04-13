@@ -4,10 +4,14 @@ const {v4 : uuid} = require("uuid");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const { insertUser } = require("../../database/models/register");
+const isAuth = require("./checkAuth");
 const router = express.Router();
 
 
+
 router.post("/login", (req, res) => {
+
+    console.log(req.session)
     const {username} = req.body;
     const {password} = req.body;
 

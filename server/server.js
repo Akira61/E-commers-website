@@ -1,45 +1,47 @@
 require("dotenv").config();
 const express = require("express");
-const path = require("path");
+const session = require("express-session");
+const mysqlStore = require("express-mysql-session")(session);
 const cors = require("cors");
 const mysql = require("mysql");
-// const {addProduct} = require("./database/models/new.product");
-const {addProduct} = require("./database/models/newProduct")
-const expressRateLimit = require("express-rate-limit");
-const {v4 : uuid} = require("uuid");
-const { db } = require("./database/Connect");
+const passport = require("passport");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 
 //database query config (we initilze database and rows with sequelize and we query data with mysql)
-const makeQuery = mysql.createConnection({
+const sqlOptions = {
     host : process.env.MYSQL_HOST,
     database : process.env.MYSQL_DBNAME,
     user : process.env.MYSQL_USER,
     password: process.env.MYSQL_PASS,
-})
+};
+const makeQuery = mysql.createConnection(sqlOptions)
 module.exports.makeQuery = makeQuery;
 
-// Middlwares
+
+// **************Middlwares********************
 app.use(express.json({limit : '50mb'}));
 app.use(express.urlencoded({extended: true}));
 app.use(cors({origin: "*"}));
-
-// limit api request
-const limitApiCall = expressRateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minutes
-	max: 2, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-})
+app.use(passport.initialize());
 
 
- 
-app.get("/rateLimit", limitApiCall, (req, res) => {
-    res.send("sup");
-})
-  
+//***************session******************
+const sessionStore = new mysqlStore(sqlOptions);
+app.use(session({
+    secret : process.env.session_secret,
+    resave : false,
+    //to prevent setting a new session every time
+    saveUninitialized : false,
+    cookie : {
+        maxAge : /* 14 * 24 * */ 3600000 // 14 days
+    },
+    store : sessionStore,
+}))
+module.exports.session = session;
+
+// ************************Routes**************************
 
 app.get("/image/:id", (req, res) => {
     const {id} = req.params;
@@ -52,8 +54,6 @@ app.get("/image/:id", (req, res) => {
         res.send(result[0].fileData);
     })
 })  
-  
-// ************************Routes**************************
 
 //get all products / single product
 app.use("/", require("./routes/product/getProduct"));
