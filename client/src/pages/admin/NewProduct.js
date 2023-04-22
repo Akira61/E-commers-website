@@ -17,24 +17,29 @@ export default function NewProduct() {
     // file configrations
     async function newProduct(){
 
-      const fileName = productImg.name;
-      const render = new FileReader();
-      render.readAsDataURL(productImg);
+      const formData = new FormData();
+      formData.append('productName', productName);
+      formData.append('price', price);
+      formData.append('productDesc', productDesc);
+      formData.append('fileData', productImg);
+      formData.append('visible', visible);
+      // const fileName = productImg.name;
+      // const render = new FileReader();
+      // render.readAsDataURL(productImg);
 
-      render.onload =async () => {
-        console.log(render.result);
+      // render.onload =async () => {
+      //   console.log(render.result);
 
         const response = await fetch("http://localhost:4000/api/new-product", {
             method : "POST",
-            headers : { "Content-Type" : "application/json"},
-            body : JSON.stringify({productName, price, productDesc, fileData : render.result, fileName, visible})
+            body :  formData /*JSON.stringify({productName, price, productDesc, fileData : render.result, fileName, visible})*/
         });
         const data = await response.json();
         
         console.log(data);
-        setResLink(`/image/${data.imgUrl}`);
+      //   setResLink(`/image/${data.imgUrl}`);
 
-      };
+      // };
 
     };
 
@@ -48,7 +53,7 @@ export default function NewProduct() {
         <label>description : </label>
         <textarea  id="" cols="30" rows="10" value={productDesc} onChange={(e) => setProductDesc(e.target.value)}></textarea>
         <br />
-        <input type="file" id="" onChange={(e) => setProductImg(e.target.files[0])}/>
+        <input type="file" id="" multiple onChange={(e) => setProductImg(e.target.files[0])}/>
         <label>visible ? </label>
         <br />
         <input type='checkbox' checked={visible} onChange={(e) => setVisible(e.target.checked)}/>

@@ -22,7 +22,7 @@ router.get("/api/products",(req, res) => {
  
 router.get("/get-product/:key", (req, res) => {
     const {key} = req.params;
-    console.log("*".repeat(30),key);
+    //console.log("*".repeat(30),key);
     const query = "SELECT * FROM products where product_id= ?";
             
     makeQuery.query(query,key, (err, result) => {
@@ -33,7 +33,7 @@ router.get("/get-product/:key", (req, res) => {
         console.log(extention)
         const image = `data:image/${extention.slice(1)};base64,${b64}`;
        // result[0].fileData = image;
-        console.log(result[0]);
+        //console.log(result[0]);
         res.send(result[0]);
     })
 }) 

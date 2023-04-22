@@ -24,7 +24,7 @@ const newProduct = db.define("products", {
         type : DataTypes.STRING,
     },
     fileData : {
-        type: DataTypes.BLOB, // you will have to change it from mysql to 'LONGBLOB' to accept long data
+        type: DataTypes.JSON, // you will have to change it from mysql to 'LONGBLOB' to accept long data
     },
     fileName : {
         type: DataTypes.STRING,
@@ -33,13 +33,13 @@ const newProduct = db.define("products", {
 
   
 function addProduct(name, price, visible, description, fileData, fileName){
-    // create the table
+    // create the table. use {force : true} inside sync() to reset database
     db.sync();
     // change fileData datatype
     //makeQuery.query("ALTER TABLE products ALTER COLUMN fileData LONGBLOB")
     
     //create product
-    newProduct.create({product_id : uuid(),name, price, visible, description, fileData, fileName}).then((result) => {
+    newProduct.create({product_id : uuid(),name : name, price : price, visible : visible, description : description, fileData : fileData, fileName : fileName}).then((result) => {
         console.log("product added successfully! ", result)
     }).catch(err => {
         console.log({"adding product error " : err})

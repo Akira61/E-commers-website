@@ -1,12 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
+const fileupload = require("express-fileupload")
 const { adminRole } = require("./config/checkRole");
 const { loggedIn } = require("./config/checkRole");
 const mysqlStore = require("express-mysql-session")(session);
 const cors = require("cors");
 const mysql = require("mysql");
 const passport = require("passport");
+const fileUpload = require("express-fileupload");
+const { addProduct } = require("./database/models/newProduct");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -63,9 +66,10 @@ app.get("/image/:id", (req, res) => {
     const query = "Select * From products where fileName=?";
     makeQuery.query(query,id,(err, result) => {
         if(err) throw err
-        console.log(result);
-        console.log(result[0].fileData);
-        res.send(result[0].fileData);
+        // console.log(result);
+        // console.log(result[0].fileData);
+        res.sendFile(`${__dirname}/routes/product/uploads/${result[0].fileName}`);
+        //res.send(result[0].fileData);
     })
 })   
  
