@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const {makeQuery} = require("../../server");
+const { loggedIn } = require("../../config/checkRole");
 const {v4 : uuid} = require("uuid");
 const nodemailer = require("nodemailer");
 const passport = require("passport");
@@ -9,7 +10,7 @@ const router = express.Router();
 
 
 
-router.post("/register",async (req, res) => {
+router.post("/register", async (req, res) => {
     const {name} = req.body;
     const {username} = req.body;
     const {password} = req.body;

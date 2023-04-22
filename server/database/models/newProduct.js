@@ -1,7 +1,7 @@
 const {db} = require("../Connect");
 const {DataTypes} = require("sequelize");
 const {v4 : uuid} = require("uuid");
-
+const {makeQuery} = require("../../server");
 const newProduct = db.define("products", {
     
     product_id: {
@@ -35,6 +35,9 @@ const newProduct = db.define("products", {
 function addProduct(name, price, visible, description, fileData, fileName){
     // create the table
     db.sync();
+    // change fileData datatype
+    //makeQuery.query("ALTER TABLE products ALTER COLUMN fileData LONGBLOB")
+    
     //create product
     newProduct.create({product_id : uuid(),name, price, visible, description, fileData, fileName}).then((result) => {
         console.log("product added successfully! ", result)

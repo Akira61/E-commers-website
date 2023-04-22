@@ -29,8 +29,8 @@ export default function NewProduct() {
             headers : { "Content-Type" : "application/json"},
             body : JSON.stringify({productName, price, productDesc, fileData : render.result, fileName, visible})
         });
-
         const data = await response.json();
+        
         console.log(data);
         setResLink(`/image/${data.imgUrl}`);
 

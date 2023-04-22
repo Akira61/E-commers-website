@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 export default function Products() {
 
   const [data, setData] = useState([]);
@@ -10,19 +10,50 @@ export default function Products() {
   const [desc, setDesc] = useState();
   const [image, setImage] = useState();
 
+  const navigate = useNavigate();
   const [getImg, setGetImg] = useState();
+  
   useEffect(() => {
-
+    // get products info
     fetch("http://localhost:4000/api/products")
-    .then(res=>res.json())
+    .then(res=> res.json())
     .then(data => {
       console.log(data);
       setData(data);
 
     })
 
+    // create new product
+  popup()
+  async function popup(){
+    const { value: formValues } = await Swal.fire({
+      icon : 'info',
+      iconColor : 'green',
+      title: 'Multiple inputs',
+      html:
+      '<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input"> </label> </div><br/>' +
+      '<div><label>  السعر بالريال<input id="price-input" type="number" min="0" class="swal2-input"></label> </div>' +
+      '<div><label>صور</label><br/> <input type="file" draggable="true"/></div>' +
+      '<div></div>',
+      inputLabel : 'وصف المنتج',
+      input : 'textarea',
+      focusConfirm: false,
+    
+      preConfirm: () => {
+        return {
+          name : document.getElementById('name-input').value,
+          price : document.getElementById('price-input').value
+        }
+        
+      }
+    })
+    
+    if (formValues) {
+      Swal.fire(JSON.stringify(formValues));
+      console.log(formValues)
+    }
+  }
   },[])
-  
   
   
   function parseImg(img) {
@@ -33,6 +64,7 @@ export default function Products() {
   }
   return (
     <div>
+    
       <Link to="/new-product"><button>New product</button></Link>
       <div>
       <table style={{background : "black"}}>

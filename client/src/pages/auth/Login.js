@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import swal from 'sweetalert2'
 
 export default function Login() {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
     const [response, setResponse] = useState();
+
 
     async function login(e){
         
@@ -15,16 +17,22 @@ export default function Login() {
         }
         const response = await fetch("http://localhost:4000/login", {
             method: 'POST',
+            credentials : "include", // to send HTTP only cookies
             headers : {"Content-Type" : "application/json"},
             body : JSON.stringify({username, password})
         });
         const data = await response.text();
-        console.log(data)
+        // if user already auth redirect to home page
+        // if(response.status == 401){
+        //   navigate('/');
+        // }
+        console.log(data);
+        console.log(response.status)
         setResponse(data)
     }
 
   return (
-    <div>
+    <>
       <div>
         <span color='red'>{response}</span>
         <div>
@@ -38,6 +46,6 @@ export default function Login() {
         <button type='submit' onClick={() => login()}>Login</button>
         <Link to='/register'>sign up</Link>
       </div>
-    </div>
+    </>
   )
 }

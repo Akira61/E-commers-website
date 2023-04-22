@@ -1,12 +1,14 @@
 const express = require("express");
+const {session} = require("../../server")
 const {makeQuery} = require("../../server");
-const {addProduct} = require("../../database/models/newProduct");
+const { adminRole } = require("../../config/checkRole");
 const {v4 : uuid} = require("uuid");
 const path = require("path");
 const router = express.Router();
 
 
-router.get("/api/products", (req, res) => {
+
+router.get("/api/products",(req, res) => {
     const query = "select * FROM products";
 
     makeQuery.query(query, (err, result) => {
@@ -35,7 +37,6 @@ router.get("/get-product/:key", (req, res) => {
         res.send(result[0]);
     })
 }) 
-
 
 
 module.exports = router;

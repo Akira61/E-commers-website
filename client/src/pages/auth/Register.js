@@ -1,22 +1,31 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Register() {
-
+    const navigate = useNavigate();
     const [name, setName] = useState();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [confirmPass, setConfirmPass] = useState();
+
+    useEffect(() => {
+        
+    },[])
 
     async function register(){
         console.log("register process")
         console.log(name, username, password, confirmPass)
         const response = await fetch("http://localhost:4000/register", {
             method : "POST",
+            credentials : "include", // to send HTTP only cookies
             headers : {"Content-Type" : "application/json"},
             body : JSON.stringify({name, username, password, confirmPass})
         });
         const data = await response.text();
+        // if user already auth redirect to home page
+        if(response.status == 401){
+            navigate('/');
+        }
         console.log(data);
     }
 

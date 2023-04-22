@@ -19,10 +19,15 @@ const register = db.define("users", {
     password : {
         type: DataTypes.STRING,
         allowNull : false
+    },
+    role : {
+        type : DataTypes.STRING,
+        defaultValue : "user",
+        allowNull : false,
     }
 });
 
-  
+
 async function insertUser(name, username, password){
     db.sync()
     const hashPassword = await bcrypt.hash(password,10);
@@ -38,3 +43,4 @@ async function insertUser(name, username, password){
 }
 
 module.exports.insertUser = insertUser;
+module.exports.User = register;

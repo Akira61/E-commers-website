@@ -1,17 +1,14 @@
 const express = require("express");
 const {makeQuery} = require("../../server");
+const { loggedIn } = require("../../config/checkRole");
 const {v4 : uuid} = require("uuid");
 const bcrypt = require("bcrypt");
 const path = require("path");
-const { insertUser } = require("../../database/models/register");
 const isAuth = require("./checkAuth");
 const router = express.Router();
 
 
-
 router.post("/login", (req, res) => {
-
-    console.log(req.session)
     const {username} = req.body;
     const {password} = req.body;
 
@@ -28,6 +25,9 @@ router.post("/login", (req, res) => {
         }
         const unHashPassword = await bcrypt.compare(password, result[0].password);
         if(unHashPassword){
+            req.session.role = result[0].role;
+            req.session.auth = true;
+            console.log(req.session)
             return res.send("user logged in successfully");
         }
         res.send("unvalid password");
