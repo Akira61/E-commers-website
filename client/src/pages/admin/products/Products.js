@@ -80,7 +80,7 @@ export default function Products() {
             </tr>
               {data.map(element => (
                 <tr style={{background : "gray"}}>
-                    <td><img src={new Image().src= new Text(element.fileData)} style={{width:'50%', objectFit:'cover'}}/></td>
+                    <td><img src={`/uploads/${element.fileName}`} style={{width:'50%', objectFit:'cover'}}/></td>
                     <td>{element.name}</td>
                     <td><span>{element.price}</span></td>
                     <td>{element.description}</td>

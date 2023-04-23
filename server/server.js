@@ -47,6 +47,7 @@ app.use(session({
 }))
 module.exports.session = session;
 
+
 // ************************Routes**************************
 
 //check request role
@@ -68,17 +69,17 @@ app.get("/image/:id", (req, res) => {
         if(err) throw err
         // console.log(result);
         // console.log(result[0].fileData);
-        res.sendFile(`${__dirname}/routes/product/uploads/${result[0].fileName}`);
+        res.sendFile(`../client/public/uploads/${result[0].fileName}`);
         //res.send(result[0].fileData);
     })
-})   
+})    
  
 //get all products / single product
 app.use("/", require("./routes/product/getProduct"));
 // add product
 app.use("/", require("./routes/product/postProduct"));
 //update product
-app.use("/",adminRole, require("./routes/product/updateProduct"));
+app.use("/", require("./routes/product/updateProduct"));
 //delete product
 app.use("/",adminRole, require("./routes/product/deleteProduct"));
  
@@ -87,6 +88,8 @@ app.use("/",adminRole, require("./routes/product/deleteProduct"));
 app.use("/", require("./routes/auth/register"));
 //login
 app.use("/", require("./routes/auth/login"));
+
+
 app.listen(PORT, console.log(`listenning on port ${PORT}`));
 
 

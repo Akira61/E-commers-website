@@ -17,10 +17,13 @@ export default function Index() {
     },[])
   return (
     <> 
-        <ProductBox data={data}/>
-      <div className="product" style={{backgroud : 'green'}}>
-        
-      </div>
+      <ul style={{background : 'pink'}}>
+        <li>Home</li>
+        <li>candis</li>
+        <li>shoose</li>
+        <li>drinks</li>
+      </ul>
+      <ProductBox data={data}/>
     </>
   )
 }

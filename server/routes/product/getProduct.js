@@ -28,12 +28,6 @@ router.get("/get-product/:key", (req, res) => {
     makeQuery.query(query,key, (err, result) => {
         if(err) throw err
 
-        const b64 = Buffer.from(result[0].fileData).toString("base64");
-        const extention = path.extname(result[0].fileName);
-        console.log(extention)
-        const image = `data:image/${extention.slice(1)};base64,${b64}`;
-       // result[0].fileData = image;
-        //console.log(result[0]);
         res.send(result[0]);
     })
 }) 

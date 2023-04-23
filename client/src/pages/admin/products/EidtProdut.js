@@ -29,21 +29,9 @@ export default function EidtProdut() {
                 setVisible(data.visible);
                 setDescription(data.description);
                 setFileData(data.fileData)
-
-                // get image
-                getImg(data.fileName);
-                function getImg(img) {
-                    console.log("$".repeat(39),data.fileName)
-                    fetch(`http://localhost:4000/image/${img}`, {method: "GET"})
-                    .then(res => res.text())
-                    .then(DATA => {
-                        console.log(DATA)
-                        //let image = URL.createObjectURL(data);
-                        let image = new Image().src = DATA;
-                        console.log(image)
-                        setImage(image);
-                    })
-        }
+                setImage(`/uploads/${data.fileName}`);
+                
+        
             })
         };
 

@@ -1,0 +1,26 @@
+
+
+.container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-column-gap: 5px;
+}
+.product{
+    margin: 10%;
+    border-style:solid;
+}
+
+.image{
+    display: flex;
+}
+.product img{
+    border-radius: 5px;
+}
+
+.info{
+    display: flex;
+    padding: 2px 16px;
+}
+
+.productName{
+}
