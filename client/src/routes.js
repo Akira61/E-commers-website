@@ -16,7 +16,6 @@ export default function Router() {
         <Route path='/' element={<Index />}/>
         <Route path="/admin-dashboard" element={<Dashboard />}/>
         <Route path='/products' element={<Products />}/>
-        <Route path='/new-product' element={ <NewProduct />}/>
         <Route path="/image/:id" element={<GetProductImage />}/>
         <Route path='/products-dashbord' element={<Products />} />
         <Route path='/edit-product/:id' element={<EidtProdut />} />

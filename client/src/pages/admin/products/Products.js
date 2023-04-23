@@ -23,51 +23,71 @@ export default function Products() {
 
     })
 
-    // create new product
-  popup()
-  async function popup(){
-    const { value: formValues } = await Swal.fire({
-      icon : 'info',
-      iconColor : 'green',
-      title: 'Multiple inputs',
-      html:
-      '<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input"> </label> </div><br/>' +
-      '<div><label>  السعر بالريال<input id="price-input" type="number" min="0" class="swal2-input"></label> </div>' +
-      '<div><label>صور</label><br/> <input type="file" draggable="true"/></div>' +
-      '<div></div>',
-      inputLabel : 'وصف المنتج',
-      input : 'textarea',
-      focusConfirm: false,
-    
-      preConfirm: () => {
-        return {
-          name : document.getElementById('name-input').value,
-          price : document.getElementById('price-input').value
-        }
-        
-      }
-    })
-    
-    if (formValues) {
-      Swal.fire(JSON.stringify(formValues));
-      console.log(formValues)
-    }
-  }
   },[])
-  
-  
-  function parseImg(img) {
 
-    return <td><img src={`data:image/jpg;base64,${image}`} style={{width:'50%', objectFit:'cover'}}/></td>
-    console.log(img.data)
-    return image;
+  // create new product
+async function newProduct(){
+  const { value: formValues } = await Swal.fire({
+    icon : 'info',
+    iconColor : 'green',
+    title: 'بيانات المنتج',
+    html:
+    '<div> <label> جاهز للعرض؟ <br/> <input type="checkbox" id="visible-input"> </label> </div><br/>'+
+    '<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input"> </label> </div><br/>' +
+    '<div><label> السعر بالريال <br/><input id="price-input" type="number" min="0" class="swal2-input"></label> </div>' +
+    '<div><label>صور</label><br/> <input type="file" id="file-input" draggable="true"/></div>' +
+    '<div></div>',
+    inputLabel : 'وصف المنتج',
+    input : 'textarea',
+    focusConfirm: false,
+  
+    preConfirm: () => {
+      return {
+        name : document.getElementById('name-input').value,
+        price : document.getElementById('price-input').value,
+        img : document.querySelector('#file-input').files[0],
+        description : document.querySelector('textarea').value,
+        visible : document.querySelector("#visible-input").checked,
+      }
+      
+    }
+  })
+  
+  // post inputs to the backend
+  insertData()
+  async function insertData(){
+
+    const formData = new FormData();
+      formData.append('productName', formValues.name);
+      formData.append('price', formValues.price);
+      formData.append('productDesc', formValues.description);
+      formData.append('fileData', formValues.img);
+      formData.append('visible', formValues.visible);
+
+    const response = await fetch("http://localhost:4000/api/new-product", {
+      method : "POST",
+      body :  formData,
+    });
+    const data = await response.json();
+    console.log(data);
   }
+  
+  if (formValues) {
+    Swal.fire({
+      icon : 'success',
+      title : "تم حفظ المنتج بنجاح"
+    });
+    console.log(formValues)
+  }
+}
+  
+
   return (
     <div>
     
-      <Link to="/new-product"><button>New product</button></Link>
+      <button onClick={() => newProduct()}>New product</button>
       <div>
-      <table style={{background : "black"}}>
+      <table style={{background : "black", color: 'black'}}>
             <tr style={{background : "green"}}>
                 <th style={{width : 200}}>Image</th>
                 <th style={{width : 200}}>Name</th>
