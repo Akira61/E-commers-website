@@ -81,7 +81,7 @@ app.use("/", require("./routes/product/postProduct"));
 //update product
 app.use("/", require("./routes/product/updateProduct"));
 //delete product
-app.use("/",adminRole, require("./routes/product/deleteProduct"));
+app.use("/", require("./routes/product/deleteProduct"));
  
 // auth
 //register

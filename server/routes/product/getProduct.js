@@ -13,7 +13,6 @@ router.get("/api/products",(req, res) => {
 
     makeQuery.query(query, (err, result) => {
         if(err) throw err;
-        console.log(result)
         res.send(result)
     })
 })

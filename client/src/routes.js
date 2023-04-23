@@ -18,7 +18,6 @@ export default function Router() {
         <Route path='/products' element={<Products />}/>
         <Route path="/image/:id" element={<GetProductImage />}/>
         <Route path='/products-dashbord' element={<Products />} />
-        <Route path='/edit-product/:id' element={<EidtProdut />} />
         <Route path='/register' element={<Register />}/>
         <Route path='/login' element={<Login />}/>
       </Routes>
