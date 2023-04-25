@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ProductBox from './components/productBox';
+import Navbar from './components/Navbar';
 
 export default function Index() {
 
@@ -17,12 +18,8 @@ export default function Index() {
     },[])
   return (
     <> 
-      <ul style={{background : 'pink'}}>
-        <li>Home</li>
-        <li>candis</li>
-        <li>shoose</li>
-        <li>drinks</li>
-      </ul>
+      <Navbar />
+      <br />
       <ProductBox data={data}/>
     </>
   )

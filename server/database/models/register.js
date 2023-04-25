@@ -24,6 +24,10 @@ const register = db.define("users", {
         type : DataTypes.STRING,
         defaultValue : "user",
         allowNull : false,
+    },
+    products : {
+        type : DataTypes.JSON,
+        
     }
 });
 

@@ -12,10 +12,11 @@ router.post("/login", (req, res) => {
     const {username} = req.body;
     const {password} = req.body;
 
+    // check if inputs filled or not
     if(!username || !password){
        return res.status(200).send("please feil the inputs");
     }
-
+    
     const query = "SELECT * FROM users WHERE username=?";
     makeQuery.query(query,[username], async(err, result) => {
         if (err) console.log(err)
