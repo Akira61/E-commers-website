@@ -1,0 +1,21 @@
+
+.login-body{
+    background-color: #F4F4F4;
+}
+
+.login {
+    display: grid;
+    margin: 100px auto; 
+    width: 20%;
+}
+
+.login input {
+    margin-bottom: 10px;
+    background-color: #eaeaea;
+}
+
+.login button {
+    background-color:royalblue;
+}
+
+

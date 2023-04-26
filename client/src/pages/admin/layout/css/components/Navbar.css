@@ -1,0 +1,14 @@
+.navbar-body{
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+.navbar-body a:hover,:focus{
+    background-color: #f1c40f;
+}
+
+.navbar-body a{
+    color : #222
+}
+

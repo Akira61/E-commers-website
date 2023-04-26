@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import swal from 'sweetalert2'
+import "./css/login.css"
 
 export default function Login() {
     const navigate = useNavigate();
@@ -9,8 +9,20 @@ export default function Login() {
 
     const [response, setResponse] = useState();
 
+    useEffect(() =>{
 
-    async function login(e){
+      auth() // check if user logged in
+      async function auth(){
+        const response = await fetch('http://localhost:4000/check-role', {credentials : "include",});
+        const validation = await response.text();
+        console.log(validation)
+        if(validation){
+          return navigate('/admin-dashboard');
+        }
+      }
+    },[]);
+
+    async function login(){
         
         if(username == undefined || password == undefined){
             return
@@ -28,24 +40,26 @@ export default function Login() {
         // }
         console.log(data);
         console.log(response.status)
-        setResponse(data)
+        setResponse(data);
     }
 
   return (
-    <>
-      <div>
-        <span color='red'>{response}</span>
+    <div className='login-body'>
+      <div className='login'>
+        <h4 className='text-center'>Login</h4>
+        <span style={{color: 'red'}} >{response}</span>
         <div>
-            <label>username : </label>
-            <input type='text' placeholder='example@example.com' onChange={(e) => setUsername(e.target.value)}/>
+            {/* <label form='username'>username :  </label> */}
+            <input id='username' type='text' className='form-control' placeholder='example@example.com' onChange={(e) => setUsername(e.target.value)}/>
         </div>
         <div>
-            <label>Password : </label>
-            <input type='password' placeholder='password' onChange={(e) => setPassword(e.target.value)}/>
+            {/* <label form='password'>Password :  </label> */}
+            <input id='password' type='password'  className='form-control' placeholder='password' onChange={(e) => setPassword(e.target.value)}/>
         </div>
-        <button type='submit' onClick={() => login()}>Login</button>
-        <Link to='/register'>sign up</Link>
+        <button className='btn btn-primary btn-block' type='submit' onClick={() => login()}>Login</button>
+        <Link to='/register' className='text-center'>or  signup</Link>
+        
       </div>
-    </>
+    </div>
   )
 }
