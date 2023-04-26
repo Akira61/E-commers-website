@@ -1,6 +1,7 @@
 const express = require("express");
 const {makeQuery} = require("../../server");
 const { loggedIn } = require("../../config/checkRole");
+const {User} = require('../../database/models/register');
 const {v4 : uuid} = require("uuid");
 const bcrypt = require("bcrypt");
 const path = require("path");
@@ -8,30 +9,40 @@ const isAuth = require("./checkAuth");
 const router = express.Router();
 
 
-router.post("/login", (req, res) => {
+router.post("/login",async (req, res) => {
     const {username} = req.body;
     const {password} = req.body;
 
     // check if inputs filled or not
     if(!username || !password){
-       return res.status(200).send("please feil the inputs");
+       return res.status(203).send("please feil the inputs");
     }
     
     const query = "SELECT * FROM users WHERE username=?";
     makeQuery.query(query,[username], async(err, result) => {
         if (err) console.log(err)
 
-        if(result.length ==0){
-            return res.send("unvalid username");
+        console.log(result);
+        // if length == 0  user dosen't existes
+        if(result.length < 1){
+            return res.status(404).send("unvalid username");
         }
+
+        // compaire input password with hashed password in DB
         const unHashPassword = await bcrypt.compare(password, result[0].password);
         if(unHashPassword){
-            req.session.role = result[0].role;
-            req.session.auth = true;
+    
+            req.session.user = result[0]; // set all user data
+            req.session.username = result[0].username// setting username to session
+            req.session.role = result[0].role; // setting the role for user to be 'user'
+            req.session.auth = true;// user authenticated
+
             console.log(req.session)
-            return res.send("user logged in successfully");
+            return res.status(200).send("user logged in successfully");
         }
-        res.send("unvalid password");
+
+        // password uncorrect
+        res.status(404).send("unvalid password");
 
     })
 

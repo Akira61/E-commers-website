@@ -37,7 +37,7 @@ app.use(session({
     secret : process.env.session_secret,
     resave : false,
     //to prevent setting a new session every time
-    saveUninitialized : true,
+    saveUninitialized : false,
     cookie : {
          // 14 days
         maxAge :  14 * 24 * 3600000,
@@ -51,28 +51,34 @@ module.exports.session = session;
 // ************************Routes**************************
 
 //check request role
-app.get("/check-role", adminRole, (req, res) => {
+app.get("/check-role", (req, res) => {
     const { role } = req.session;
     // if(role !== 'admin'){
     //    return res.status(401).send("you don't have a pormision")
     // }
-    console.log("^".repeat(30),req.session.role);
-    res.send(req.session.role);
+    console.log("^".repeat(30),role);
+    res.send(role);
 })
 
- 
+//user info
+app.get("/user", (req, res) => {
+    const user = req.session.user.user_id;
+    res.json(user);
+});
+
+
 app.get("/image/:id", (req, res) => {
     const {id} = req.params;
     console.log(id)
-    const query = "Select * From products where fileName=?";
+    const query = "Select fileName From products where fileName=?";
     makeQuery.query(query,id,(err, result) => {
         if(err) throw err
-        // console.log(result);
+        console.log(result);
         // console.log(result[0].fileData);
         res.sendFile(`../client/public/uploads/${result[0].fileName}`);
         //res.send(result[0].fileData);
     })
-})    
+})      
  
 //get all products / single product
 app.use("/", require("./routes/product/getProduct"));
@@ -88,7 +94,8 @@ app.use("/", require("./routes/product/deleteProduct"));
 app.use("/", require("./routes/auth/register"));
 //login
 app.use("/", require("./routes/auth/login"));
-
+//logout
+app.use("/", require("./routes/auth/logout"));
 
 app.listen(PORT, console.log(`listenning on port ${PORT}`));
 
