@@ -25,10 +25,10 @@ const register = db.define("users", {
         defaultValue : "user",
         allowNull : false,
     },
-    products : {
-        type : DataTypes.JSON,
+    // products : {
+    //     type : DataTypes.JSON,
         
-    }
+    // }
 });
 
 

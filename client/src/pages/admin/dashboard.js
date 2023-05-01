@@ -3,11 +3,12 @@ import Header from './includes/components/header'
 import Footer from './includes/components/footer'
 import { useNavigate } from 'react-router-dom';
 import Navbar from './includes/components/Navbar';
+import { adminUrl } from './includes/functions/admin.path';
+
 export default function Dashboard() {
-
     const navigate = useNavigate()
+    
     useEffect(() =>{
-
         auth() // check if user logged in
         async function auth(){
           const response = await fetch('http://localhost:4000/check-role', {credentials : "include",});
@@ -21,8 +22,11 @@ export default function Dashboard() {
           else if(!validation){
             return navigate('/login');
           }
-          return navigate('/admin-dashboard'); // user is admin
-        }
+          return navigate(adminUrl.dashboard); // user is admin
+        };
+
+
+
       },[]);
   return (
     <>

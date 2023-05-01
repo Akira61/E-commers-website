@@ -80,9 +80,9 @@ export default function Products() {
 
     //get product information
     const getData = await fetch(`http://localhost:4000/get-product/${productId}`);
-    const data = await getData.json();
+    let data = await getData.json();
     console.log(data);
-
+    
     // aplay info to the alert
     const { value : updatedData } = await Swal.fire({
       icon : 'question',
@@ -92,7 +92,7 @@ export default function Products() {
       `<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input" value="${data.name}" > </label> </div><br/>` +
       `<div><label> السعر بالريال <br/><input id="price-input" type="number" min="0" value=${data.price}></label> </div>` +
       `<div><label>صور</label><br/> <img src="/uploads/${data.fileName}" width ='50%' objectFit='cover'/></div>` +
-      '<div><label>صور</label><br/> <input type="file" id="file-input" draggable="true"/></div>' +
+      '<div><label> تعديل الصورة </label><br/> <input type="file" id="file-input" draggable="true"/></div>' +
       '<div></div>',
       inputLabel : 'وصف المنتج',
       input : 'textarea',
@@ -111,6 +111,15 @@ export default function Products() {
 
     // send new data to the server
     if(updatedData){
+
+      const formData = new FormData();
+        formData.append('name', updatedData.name);
+        formData.append('price', updatedData.price);
+        formData.append('description', updatedData.description);
+        formData.append('fileData', updatedData.img);
+        formData.append('visible', updatedData.visible);
+
+
       const response =await fetch(`http://localhost:4000/update-product/${productId}`, {
         method: "PUT",
         headers: {"Content-Type" : "application/json"},
@@ -120,6 +129,7 @@ export default function Products() {
           description : updatedData.description,
           fileData : updatedData.img
         })
+        // body : formData,
       });
       const data = await response.text();
       console.log(data);

@@ -1,15 +1,14 @@
 require("dotenv").config();
 const express = require("express");
+const helmet = require("helmet");
 const session = require("express-session");
 const fileupload = require("express-fileupload")
 const { adminRole } = require("./config/checkRole");
 const { loggedIn } = require("./config/checkRole");
 const mysqlStore = require("express-mysql-session")(session);
 const cors = require("cors");
+const {v4 : uuid} = require("uuid");
 const mysql = require("mysql");
-const passport = require("passport");
-const fileUpload = require("express-fileupload");
-const { addProduct } = require("./database/models/newProduct");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -29,6 +28,7 @@ module.exports.makeQuery = makeQuery;
 app.use(express.json({limit : '50mb'}));
 app.use(express.urlencoded({extended: true}));
 app.use(cors({origin: ['http://localhost:3000'],optionsSuccessStatus: 200,credentials: true,}));
+app.use(helmet());
 
 
 //***************session******************
@@ -41,7 +41,9 @@ app.use(session({
     cookie : {
          // 14 days
         maxAge :  14 * 24 * 3600000,
-        httpOnly: true,
+        // turn them on when you done from developing enviromant for security resonse
+        // httpOnly: true, 
+        // secure : true,
     },
     store : sessionStore,
 }))
@@ -60,11 +62,25 @@ app.get("/check-role", (req, res) => {
     res.send(role);
 })
 
-//user info
-app.get("/user", (req, res) => {
+//user's id
+app.get("/userID",loggedIn,(req, res) => {
+
     const user = req.session.user.user_id;
-    res.json(user);
+    res.send(user);
 });
+
+// // set csrf token
+// app.get("/set-csrfToken", (req, res) => {
+    
+//         if(req.session.csrfToken) return res.send(req.session.csrfToken)// user already have an token
+//         // const csrfToken = uuid();
+//         // req.session.csrfToken = csrfToken;
+//         // res.send(csrfToken);
+//         // return;
+    
+// })
+
+app.get("/user?id");
 
 
 app.get("/image/:id", (req, res) => {
@@ -81,13 +97,13 @@ app.get("/image/:id", (req, res) => {
 })      
  
 //get all products / single product
-app.use("/", require("./routes/product/getProduct"));
+app.use("/", require("./routes/admin/product/getProduct"));
 // add product
-app.use("/", require("./routes/product/postProduct"));
+app.use("/", require("./routes/admin/product/postProduct"));
 //update product
-app.use("/", require("./routes/product/updateProduct"));
+app.use("/", require("./routes/admin/product/updateProduct"));
 //delete product
-app.use("/", require("./routes/product/deleteProduct"));
+app.use("/", require("./routes/admin/product/deleteProduct"));
  
 // auth
 //register
@@ -96,6 +112,14 @@ app.use("/", require("./routes/auth/register"));
 app.use("/", require("./routes/auth/login"));
 //logout
 app.use("/", require("./routes/auth/logout"));
+
+
+//edit user profile
+app.use("/", require("./routes/user/edit.profile"));
+
+// edit user password
+app.use("/", require("./routes/user/edit.password"));
+
 
 app.listen(PORT, console.log(`listenning on port ${PORT}`));
 

@@ -1,6 +1,4 @@
 
-set up database ✅
-upload new product ✅
-show products in dashbord ✅
-edit and delete product ✅
-dashbord for styling website
+secure the website from csrf attack
+prevent sql injection
+general website security

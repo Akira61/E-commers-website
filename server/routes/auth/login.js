@@ -15,7 +15,7 @@ router.post("/login",async (req, res) => {
 
     // check if inputs filled or not
     if(!username || !password){
-       return res.status(203).send("please feil the inputs");
+       return res.status(203).json({message : "Please fill the inputs"});
     }
     
     const query = "SELECT * FROM users WHERE username=?";
@@ -25,24 +25,29 @@ router.post("/login",async (req, res) => {
         console.log(result);
         // if length == 0  user dosen't existes
         if(result.length < 1){
-            return res.status(404).send("unvalid username");
+            return res.status(404).json({message : "unvalid username"});
         }
 
         // compaire input password with hashed password in DB
         const unHashPassword = await bcrypt.compare(password, result[0].password);
         if(unHashPassword){
-    
+            const csrfToken = uuid();// set random char to prevent csrf attack
+
             req.session.user = result[0]; // set all user data
             req.session.username = result[0].username// setting username to session
+            req.session.csrfToken = csrfToken;
             req.session.role = result[0].role; // setting the role for user to be 'user'
             req.session.auth = true;// user authenticated
-
+            
             console.log(req.session)
-            return res.status(200).send("user logged in successfully");
+            return res.status(200).json({
+                message : "user logged in successfully",
+                csrfToken
+            });
         }
 
         // password uncorrect
-        res.status(404).send("unvalid password");
+        res.status(401).json({message : "unvalid password"});
 
     })
 

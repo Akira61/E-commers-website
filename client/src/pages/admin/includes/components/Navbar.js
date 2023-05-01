@@ -11,12 +11,18 @@ export default function Navbar_() {
     const redirect = useNavigate()
     const [userID, setUserID] = useState("");
     useEffect(() => {
-        fetch("http://localhost:4000/user",{credentials : "include",})// fetching user's id
-        .then(res => res.json())
+        fetch("http://localhost:4000/userID",{credentials : "include",})// fetching user's id
+        .then(res => res.text())
         .then(ID => {
             setUserID(ID);
         });
     },[]);
+
+    //edit profile
+    // async function editProfile(){
+    //   const response = await fetch(`http://localhost:4000/edit-profile?id=${userID}`);
+
+    // }
 
     async function logout(){
         const response = await fetch(`http://localhost:4000/logout/${userID}`, {
@@ -35,9 +41,9 @@ export default function Navbar_() {
         <Navbar.Collapse id="navbarScroll" >
           <Nav className="me-auto my-2 my-lg-0">
 
-            <Nav.Link href="/admin-dashboard">{language("home")}</Nav.Link>
+            <Nav.Link href="/admin/dashboard">{language("home")}</Nav.Link>
             <Nav.Link href="#action2">{language("categories")}</Nav.Link>
-            <Nav.Link href="/products">{language("items")}</Nav.Link>
+            <Nav.Link href="/admin/products">{language("items")}</Nav.Link>
             <Nav.Link href="#action2">{language("members")}</Nav.Link>
             <Nav.Link href="#action2">{language("statistics")}</Nav.Link>
             <Nav.Link href="#action2">{language("logs")}</Nav.Link>
@@ -47,7 +53,7 @@ export default function Navbar_() {
             <Nav bg="light" variant='light' className="ms-auto">
 
                 <NavDropdown title="Fahad" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">{language("Edit Profile")}</NavDropdown.Item>
+                <NavDropdown.Item href={`/edit-profile/${userID}`} >{language("Edit Profile")}</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">{language("Settings")}</NavDropdown.Item>
                 <NavDropdown.Item href="#action5" onClick={() => logout()}>{language("Logout")}</NavDropdown.Item>
                 </NavDropdown>

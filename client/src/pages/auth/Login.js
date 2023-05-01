@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import "./css/login.css"
+import { adminUrl } from '../admin/includes/functions/admin.path';
+import { csrf } from '../admin/includes/functions/csrf';
 
 export default function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-
     const [response, setResponse] = useState();
-
     useEffect(() =>{
 
       auth() // check if user logged in
@@ -17,32 +17,26 @@ export default function Login() {
         const validation = await response.text();
         console.log(validation)
         if(validation){
-          return navigate('/admin-dashboard');
+          navigate(adminUrl.dashboard);
         }
       }
     },[]);
 
     async function login(){
         
-        if(username == undefined || password == undefined){
-            return
-        }
         const response = await fetch("http://localhost:4000/login", {
-            method: 'POST',
-            credentials : "include", // to send HTTP only cookies
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify({username, password})
+          method: 'POST',
+          credentials : "include", // to send HTTP only cookies
+          headers : {"Content-Type" : "application/json"},
+          body : JSON.stringify({username, password})
         });
-        const data = await response.text();
-        // if user already auth redirect to home page
-        // if(response.status == 401){
-        //   navigate('/');
-        // }
+        const data = await response.json()
+    
         console.log(data);
-        console.log(response.status)
-        setResponse(data);
+        console.log(response.status);
+        setResponse(data.message);
+        // const csrfToken =  data.csrfToken;// setting the token globally in the javascript        
     }
-
   return (
     <div className='login-body'>
       <div className='login'>
@@ -58,8 +52,8 @@ export default function Login() {
         </div>
         <button className='btn btn-primary btn-block' type='submit' onClick={() => login()}>Login</button>
         <Link to='/register' className='text-center'>or  signup</Link>
-        
       </div>
     </div>
   )
 }
+
