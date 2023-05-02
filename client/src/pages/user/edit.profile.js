@@ -31,9 +31,10 @@ export default function Edit_profile() {
         // get user data
         window.onload =  getData();
         async function getData(){
-            const response = await fetch(`http://localhost:4000/edit-profile/${userId}`, {
-                method : "GET",
-                credentials : 'include'
+            const response = await fetch(`http://localhost:4000/edit-profile`, {
+                method : "POST",
+                credentials : 'include',
+                body : JSON.stringify({userId})
             })
     
             // redirect if user not auth
@@ -51,19 +52,30 @@ export default function Edit_profile() {
     //push new data
     async function pushChange(){
 
-        if(!name && !username && !password) return setErrMessage("please fill the inputs")
+        if(!name && !username) return setErrMessage("please fill the inputs")
         
         try {
-            const response = await fetch(`http://localhost:4000/edit-profile/${userId}`,{
+            const response = await fetch(`http://localhost:4000/edit-profile/`,{
                 method : "put",
                 credentials : "include",
                 headers : {"Content-Type" : "application/json"},
-                body : JSON.stringify({name, username, password})
+                body : JSON.stringify({userId, name, username})
             });
             const data = await response.json()
-            if(!response.ok){
-                setErrMessage(data.msg);
+            if(data.err_message){
+                setErrMessage(data.err_message);
             }
+
+            //fire success popup
+            if(data.success){
+                Swal.fire({
+                    icon : 'success',
+                    title : "information saved",
+                    confirmButtonColor : 'green'
+                });
+                redirect('/');
+            }
+            
         } catch (error) {
             
         }
@@ -80,6 +92,7 @@ export default function Edit_profile() {
             title : ' تغيير كلمة المرور ',
             confirmButtonColor : 'green',
             confirmButtonText : 'Save',
+            showCancelButton : true,
             html : `
                 <form>
                     <div class="form-row">
@@ -120,13 +133,14 @@ export default function Edit_profile() {
 
 
         // send changes
-        const response = await fetch(`http://localhost:4000/change-password/${userId}`, {
+        const response = await fetch(`http://localhost:4000/change-password/`, {
             method : 'PUT',
             headers : {
                 "Content-Type" : "application/json"
             },
             credentials : 'include',
             body : JSON.stringify({
+                userId,//send user id
                 currentPass : updatePassword.currentPass,
                 newPass : updatePassword.newPass,
                 confirmPass : updatePassword.confirmPass,
@@ -184,27 +198,20 @@ export default function Edit_profile() {
                     </div>
                 </div>
 
-                {/* Save button */}
-                <div className='form-group row'>
-                    <label className='col-sm-2 control-label' for='password' >password </label>
-                    <div className='col-sm-10 col-md-7'>
-                        <input className='form-control' id='password' type='password' onChange={(e) => setPassword(e.target.value)}/>
-                    </div>
-                </div>
-
-                {/* password field */}
-                <div className='form-group row'>
-                    <div className='col-sm-4 '>
-                        <input className='form-control btn btn-success' value="change password" type='button' onClick={() => changePass()}/>
-                    </div>
-                </div>
- 
                 {/* save button */}
                 <div className='form-group row'>
                     <div className='col-sm-2 '>
                         <input className='form-control btn btn-success' value="Save" type='button' onClick={() => pushChange()}/>
                     </div>
                 </div>
+
+                {/* password change button */}
+                <div className='form-group row'>
+                    <div className='col-sm-4 '>
+                        <input className='form-control btn btn-success' value="change password" type='button' onClick={() => changePass()}/>
+                    </div>
+                </div>
+ 
 
             </form>
         </div>

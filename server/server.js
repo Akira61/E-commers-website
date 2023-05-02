@@ -94,24 +94,30 @@ app.get("/image/:id", (req, res) => {
         res.sendFile(`../client/public/uploads/${result[0].fileName}`);
         //res.send(result[0].fileData);
     })
-})      
+}) 
+
+
  
-//get all products / single product
-app.use("/", require("./routes/admin/product/getProduct"));
-// add product
-app.use("/", require("./routes/admin/product/postProduct"));
-//update product
-app.use("/", require("./routes/admin/product/updateProduct"));
-//delete product
-app.use("/", require("./routes/admin/product/deleteProduct"));
- 
+//products
+    //get all products / single product
+    app.use("/", require("./routes/admin/product/getProduct"));
+    // add product
+    app.use("/", require("./routes/admin/product/postProduct"));
+    //update product
+    app.use("/", require("./routes/admin/product/updateProduct"));
+    //delete product
+    app.use("/", require("./routes/admin/product/deleteProduct"));
+//
+
+
 // auth
-//register
-app.use("/", require("./routes/auth/register"));
-//login
-app.use("/", require("./routes/auth/login"));
-//logout
-app.use("/", require("./routes/auth/logout"));
+    //register
+    app.use("/", require("./routes/auth/register"));
+    //login
+    app.use("/", require("./routes/auth/login"));
+    //logout
+    app.use("/", require("./routes/auth/logout"));
+//
 
 
 //edit user profile
@@ -119,6 +125,14 @@ app.use("/", require("./routes/user/edit.profile"));
 
 // edit user password
 app.use("/", require("./routes/user/edit.password"));
+
+
+// staff
+    //add new staff member
+    app.use("/", require("./routes/admin/staff/add.member"));
+    // get all staff info
+    app.use("/", require("./routes/admin/staff/get.members"));
+//
 
 
 app.listen(PORT, console.log(`listenning on port ${PORT}`));

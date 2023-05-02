@@ -7,8 +7,10 @@
  */
 
 export const adminUrl = {
+    serverHost          : "http://localhost",
     dashboard           : "/admin/dashboard",
     manageStaff         : "/admin/staff/manage",
+    members             : "/staff/members",
     productsDashboard   : "/admin/products",
 
 }

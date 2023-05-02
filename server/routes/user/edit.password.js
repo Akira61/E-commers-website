@@ -8,8 +8,8 @@ const path = require("path");
 const router = express.Router();
 
 
-router.put("/change-password/:userId",loggedIn, async(req, res) => {
-    const {userId} = req.params;
+router.put("/change-password/",loggedIn, async(req, res) => {
+    const {userId} = req.body;
     const {currentPass} = req.body;
     const {newPass} = req.body;
     const {confirmPass} = req.body;

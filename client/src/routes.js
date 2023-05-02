@@ -21,7 +21,7 @@ export default function Router() {
         <Route path="/image/:id" element={<GetProductImage />}/>
         <Route path='/register' element={<Register />}/>
         <Route path='/login' element={<Login />}/>
-        <Route path='/edit-profile/:id' element={<Edit_profile />} />
+        <Route path='/edit-profile' element={<Edit_profile />} />
       </Routes>
     </>
   )

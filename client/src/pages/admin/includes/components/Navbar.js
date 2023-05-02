@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useNavigate } from 'react-router-dom';
+import { adminUrl } from '../functions/admin.path';
 export default function Navbar_() {
     
     const redirect = useNavigate()
@@ -41,10 +42,10 @@ export default function Navbar_() {
         <Navbar.Collapse id="navbarScroll" >
           <Nav className="me-auto my-2 my-lg-0">
 
-            <Nav.Link href="/admin/dashboard">{language("home")}</Nav.Link>
+            <Nav.Link href={adminUrl.dashboard}>{language("home")}</Nav.Link>
             <Nav.Link href="#action2">{language("categories")}</Nav.Link>
-            <Nav.Link href="/admin/products">{language("items")}</Nav.Link>
-            <Nav.Link href="#action2">{language("members")}</Nav.Link>
+            <Nav.Link href={adminUrl.productsDashboard}>{language("items")}</Nav.Link>
+            <Nav.Link href={adminUrl.manageStaff}>{language("members")}</Nav.Link>
             <Nav.Link href="#action2">{language("statistics")}</Nav.Link>
             <Nav.Link href="#action2">{language("logs")}</Nav.Link>
 
@@ -53,7 +54,7 @@ export default function Navbar_() {
             <Nav bg="light" variant='light' className="ms-auto">
 
                 <NavDropdown title="Fahad" id="navbarScrollingDropdown">
-                <NavDropdown.Item href={`/edit-profile/${userID}`} >{language("Edit Profile")}</NavDropdown.Item>
+                <NavDropdown.Item href={`/edit-profile`} >{language("Edit Profile")}</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">{language("Settings")}</NavDropdown.Item>
                 <NavDropdown.Item href="#action5" onClick={() => logout()}>{language("Logout")}</NavDropdown.Item>
                 </NavDropdown>

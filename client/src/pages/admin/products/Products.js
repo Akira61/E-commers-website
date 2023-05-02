@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+
 export default function Products() {
 
   const [data, setData] = useState([]);

@@ -32,12 +32,12 @@ const register = db.define("users", {
 });
 
 
-async function insertUser(name, username, password){
+async function insertUser(name, username, password, role='user'){
     db.sync()
     const hashPassword = await bcrypt.hash(password,10);
     console.log(hashPassword);
 
-    register.create({user_id : uuid(), name, username,password: hashPassword})
+    register.create({user_id : uuid(), name, username,password: hashPassword, role})
     .then(res => {
         console.log("user inserted successfully !",res);
         

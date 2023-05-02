@@ -1,0 +1,26 @@
+
+
+.main-table tr:first-child th{
+    background-color: #333;
+    color : #fff
+}
+
+
+/*auto incriment table*/
+table {
+    counter-reset: tableCount;
+}
+.counterCell:before {              
+    content: counter(tableCount); 
+    counter-increment: tableCount; 
+}
+
+/* center the table */
+.container{
+    margin-right: 0 !important;
+}
+
+/* space between buttons */
+.btn{
+    margin: 5px !important;
+}
