@@ -5,7 +5,7 @@ const { loggedIn } = require("../../config/checkRole");
 const {v4 : uuid} = require("uuid");
 const nodemailer = require("nodemailer");
 const passport = require("passport");
-const {insertUser} = require("../../database/models/register");
+const {insertUser, User} = require("../../database/models/register");
 const router = express.Router();
 
 
@@ -25,35 +25,31 @@ router.post("/register", async (req, res) => {
         return res.send("password does not match");
     }
 
-    // check if user exists
-    const query = "SELECT * FROM users WHERE username=?";
-    makeQuery.query(query, username, (err, result) => {
-        if (err) throw err;
-        console.log(result);
-        // if length result != 0 that means there is a user with this email
-        if(result.length !== 0){
-            return res.send("user already exists. please try to login");
+    //check if username already in the database
+    const emailExists = await User.findOne({where : {username}});
+    if(emailExists){
+        return res.send("Email already exists");
+    }
+
+    //************verify email with nodemailer***************
+    nodemailer.createTransport({
+        service : process.env.service,
+        auth : {
+            user : process.env.user,
+            pass: process.env.password
         }
+    });
+    const emailBody = {
+        from: process.env.user,
+        to : username,
+        subject : "please verify your email",
+        body : ``
+    }
 
-        //************verify email with nodemailer***************
-
-        nodemailer.createTransport({
-            service : process.env.service,
-            auth : {
-                user : process.env.user,
-                pass: process.env.password
-            }
-        });
-
-        const emailBody = {
-            from: process.env.user,
-            to : username,
-            subject : "please verify your email",
-            body : ``
-        }
-        insertUser(name, username, password);
-        res.send("register complite please login");
-    })
+    // insert user
+    insertUser(name, username, password);
+    res.send("register complite please login");
+    
     
 })
 

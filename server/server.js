@@ -130,8 +130,12 @@ app.use("/", require("./routes/user/edit.password"));
 // staff
     //add new staff member
     app.use("/", require("./routes/admin/staff/add.member"));
-    // get all staff info
+    // get all staff info / one member info
     app.use("/", require("./routes/admin/staff/get.members"));
+    //edit member info
+    app.use("/", require('./routes/admin/staff/edit.member'));
+    //delete Member :(
+    app.use("/", require("./routes/admin/staff/delete.member"));
 //
 
 

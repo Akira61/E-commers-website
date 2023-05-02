@@ -4,14 +4,16 @@ const { adminRole } = require("../../../config/checkRole");
 const {v4 : uuid} = require("uuid");
 const path = require("path");
 const { User, insertUser } = require("../../../database/models/register");
+const {checkItem} = require("../../../config/check.existing.item");
 const router = express.Router();
 
 
-router.post('/staff/manage/add-member', (req, res) => {
+router.post('/staff/manage/add-member', async(req, res) => {
     const {userId} = req.body;
     const {username} = req.body;
     const {name} = req.body;
-    const {password} = req.body;    
+    const {password} = req.body;
+    const {role} = req.body;    
     console.log(req.body);
 
     if(req.session.user.role === "user"){
@@ -24,7 +26,7 @@ router.post('/staff/manage/add-member', (req, res) => {
     }
 
     // check inputs filled or not
-    if(!name || !username || !password){
+    if(!name || !username || !password || !role){
         return res.json({err_message : "Please fill the inputs"});
     }
 
@@ -34,8 +36,14 @@ router.post('/staff/manage/add-member', (req, res) => {
         return res.json({err_message : "Please enter a correct email"})
     }
 
+    //check if username already in the database
+    const emailExists = await User.findOne({where : {username}});
+    if(emailExists){
+        return res.json({err_message : "Email already exists"})
+    }
     // password will be hashed by the function
-    insertUser(name , username, password, 'staff');
+    insertUser(name , username, password, role);
+    res.json({success : true})
 
 });
 
