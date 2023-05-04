@@ -27,7 +27,7 @@ export default function Staff_manage() {
     // check if user logged in
       isAdmin(adminUrl.manageStaff,navigate)
 
-      
+
     // get user id
     id();
     async function id(){
@@ -72,7 +72,7 @@ export default function Staff_manage() {
 
         {/* Members Table */}
         <div className='table-responsive'>
-          <Table striped bordered hover className='main-table table table-bordered text-center'>
+          <Table striped bordered hover className=' main-table table table-bordered text-center'>
             {/* table headers */}
             <thead>
               <tr>

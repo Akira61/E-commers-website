@@ -1,5 +1,6 @@
-import { faAdd, faEdit, faRemove } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faComment, faCommentSlash, faComments, faEdit, faEye, faEyeDropper, faEyeSlash, faRemove, faSort, faStore, faStoreSlash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import $ from 'jquery';
 import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/esm/Table'
 import Navbar_ from '../includes/components/Navbar'
@@ -26,16 +27,18 @@ export default function ManageCategories() {
         }
 
         //get categories
-        categories()
-        async function categories(){
-            const response = await fetch(adminUrl.serverHost  + "/admin/categories/get-all",{
-                credentials : "include"
-            });
-            const data = await response.json();
-            console.log(data);
-            setCategory(data);
-        }
+        getCategories(adminUrl.serverHost  + "/admin/categories/get-all")
     },[]);
+
+    //get categories function
+    async function getCategories(url){
+        const response = await fetch(url ,{
+            credentials : "include"
+        });
+        const data = await response.json();
+        console.log(data);
+        setCategory(data);
+    }
 
 
     // Add new Category
@@ -148,7 +151,7 @@ export default function ManageCategories() {
           //password updated succssfully, fire success popup
           const success = await Swal.fire({
             icon : 'success',
-            title : "New Member Added"
+            title : "New Category Added"
           })
           
           // on 'ok' button click
@@ -161,70 +164,303 @@ export default function ManageCategories() {
     }
 
 
+    // Edite Categorie
+        async function EditCategory(Category_id){
 
+            //send request to get member info
+            const response = await fetch(adminUrl.serverHost + `/admin/categories/get-one?id=${Category_id}`, {
+                method : "get",
+                credentials : "include",
+            });
+            const data = await response.json();
+            if(!response.ok){
+                return;
+            }
+            console.log(data)
+        
+            //edit popup
+            popup()
+            async function popup(){
+                
+                let category = await Swal.fire({
+                icon : 'info',
+                iconColor : 'gold',
+                title : 'Edit Category',
+                confirmButtonColor : 'gold',
+                confirmButtonText : 'Edit Category',
+                showCancelButton : true,
+                showCloseButton: true,
+                html : `
+              <form>
+                  <div class="form-row">
+                  <div class="form-group col-md-6">
+                      <input type="text" class="form-control" id="name" placeholder="Name" value="${data.Name}" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <input type="number" class="form-control" id="Ordering" placeholder="Ordering" value = ${data.Ordering} required>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <textarea class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${data.Description}</textarea>
+                  </div>
+                  </div>
+                  <div class="form-group col-md-6">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input Visible switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Visible)}>
+                    <label class="form-check-label" for="checkBox">Visible</label>
+                  </div>
+                
+                  <div class="form-check form-switch">
+                    <input class="form-check-input allow-comments switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Allow_Comments)}>
+                    <label class="form-check-label" for="checkBox">Allow Comments</label>
+                  </div>
+                  
+                  <div class="form-check form-switch">
+                    <input class="form-check-input allow-ads switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Allow_Ads)}>
+                    <label class="form-check-label" for="checkBox">Allow Ads</label>
+                  </div>
+                  </div>
+                  </div>
+              </form>`,
+              
+            
+            preConfirm: () => {
+                return {
+                name : document.getElementById('name').value,
+                ordering : document.getElementById('Ordering').value,
+                description : document.getElementById('description').value,
+                visible : document.querySelector('.Visible').checked,
+                allowComments : document.querySelector('.allow-comments').checked,
+                allowAds : document.querySelector('.allow-ads').checked,
+                }}
+            });
+                if(!data.Visible){
+                    category.value.visible = false;
+                }
+        
+                //send new data
+                if(category.isConfirmed){
+                console.log(category.value)
+                const response = await fetch( adminUrl.serverHost + `/admin/categories/Edit-category`, {
+                    method : 'PUT',
+                    headers : {"Content-Type" : "application/json"},
+                    credentials : "include",
+                    body : JSON.stringify({
+                    Name : category.value.name,
+                    Description : category.value.description,
+                    Ordering : category.value.ordering,
+                    Allow_Ads : category.value.allowAds,
+                    Allow_Comments : category.value.allowComments,
+                    userId,
+                    Category_id,
+                    })
+                });
+            
+                const data = await response.json();
+                //handel server error
+                if(data.err_message){
+                    const res = await Swal.fire({
+                        icon : 'error',
+                        title : "unvalid data",
+                        text : data.err_message,
+                        showCancelButton : true,
+                    });
+                    // if user click 'ok' button popup change password
+                    if(res.isConfirmed){
+                        popup();
+                    }
+                }
+                if(data.success){
+                    //password updated succssfully, fire success popup
+                    const success = await Swal.fire({
+                    icon : 'success',
+                    title : "Category Updated"
+                    })
+                    // on 'ok' button click
+                    if(success.isConfirmed){
+                    // reload the page
+                    window.location.reload();
+                    }
+                }}
+            }
+            //send data
+           
+        }  
+
+
+        //Delete Category
+        async function DeleteCategory(Category_id){
+            //warning before actions
+            const {value : deletedProduct } =await Swal.fire({
+                icon : 'warning',
+                iconColor : 'red',
+                confirmButtonColor : 'gray',
+                title : 'هل انت متأكد؟',
+                showCancelButton : true,
+                showCloseButton: true,
+            });
+        
+            if(deletedProduct){
+                const sendReq = await fetch(adminUrl.serverHost + `/admin/categories/delete-category/${userId}/${Category_id}`, {
+                method: "DELETE",
+                credentials : "include"
+                });
+                const data = await sendReq.json()
+                console.log(data)
+        
+                if(data.success){
+                //password updated succssfully, fire success popup
+                const success = await Swal.fire({
+                    icon : 'success',
+                    title : "Category Deleted"
+                })
+                // on 'ok' button click
+                if(success.isConfirmed){
+                    // reload the page
+                    window.location.reload();
+                }
+                } 
+            }
+      
+        }
   return (
-    <div>
+    <>
+    <script defer src="jquery-3.6.4.min.js"></script>
       <Navbar_ />
 
-<h1 className='text-center'>Manage Categories</h1>
+        <h1 className='text-center'>Manage Categories</h1>
+        <br />
+        <div className='container'>
 
-{/* Table */}
-<div className='container manage-container'>
-    
-  {/* add new member button */}
-  <div className='table-responsive'>
-  <div className='form-group'>
-    <div className='col-sm-2'>
-      <button className='btn btn-primary btn-sm' onClick={() => AddCategory()}>
-        <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon> New Member
-        </button>
-    </div>
-  </div>
-
-    <Table striped bordered hover className='main-table table table-bordered text-center'>
-      {/* table headers */}
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Ordering</th>
-          <th>Visible</th>
-          <th>Allow Comments</th>
-          <th>Allow Ads</th>
-          <th>Controls</th>
-        </tr>
-      </thead>
-      {/* table info */}
-      <tbody>
-        {category.map(item => (
-            <tr>
-            <td className='counterCell'></td>
-            <td>{item.Name}</td>
-            <td>{item.Description}</td>
-            <td>{item.Ordering}</td>
-            <td>{String(item.Visible)}</td>
-            <td>{String(item.Allow_Comments)}</td>
-            <td>{String(item.Allow_Ads)}</td>
-            <td>
-            <div>
-                <a href='#' className='btn btn-success btn-sm'>
-                <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
-                    </a>
-                <a href='#' className='btn btn-danger btn-sm' >
-                <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
-                    </a>
+            {/* Start add Button */}
+                <div className='form-group'>
+                    <div className='col-sm-2'>
+                        <button className='btn btn-primary btn-sm' onClick={() => AddCategory()}>
+                        <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon> New Category
+                        </button>
+                    </div>
                 </div>
-            </td>
-            </tr>
-        ))}
-      
-      </tbody>
-    </Table>
-  </div>
-</div>
+            {/* End add button */}
 
+            </div><div class="container card categories" style={{width: '60%'}}>
+                {/* Header */}
+                    <div class="card-header">
+                        Manage Categories
+                        <div className='ordering float-md-end'>
+                           <FontAwesomeIcon icon={faSort}></FontAwesomeIcon> Ordering : 
+                            <a href='#' onClick={() => getCategories(adminUrl.serverHost  + "/admin/categories/get-all?sort=DESC")}>Latest</a>|
+                            <a href='#' onClick={() => getCategories(adminUrl.serverHost  + "/admin/categories/get-all?sort=ASC")}>Oldest</a>
+                        </div>
+                    </div>
+                {/* End Header */}
+            {/* body */}
+                <div class="card-body">
+                    {category.map((item,i) => (
+                        
+                        <div className='categories-body'>
+                        {/* <span className='counterCell'></span> */}
+                        
+                            <h3>{item.Name}</h3>
+                        <div className='full-view'>
+                        <p>{item.Description}</p>
+                        {/* <span>{item.Ordering}</span> */}
 
-    </div>
+                        {item.Visible?
+                        <span className='btn btn-success btn-sm'>
+                            <FontAwesomeIcon icon={faEye}></FontAwesomeIcon> Visible
+                        </span>:
+                        <span className='btn btn-danger btn-sm'>
+                            <FontAwesomeIcon icon={faEyeSlash}>
+                            </FontAwesomeIcon> Hidden
+                        </span>}
+
+                        {item.Allow_Comments?
+                        <span style={{backgroundColor: '#ff9f43'}} className='btn btn-success btn-sm'>
+                            <FontAwesomeIcon icon={faComment}></FontAwesomeIcon> Comments Enabled
+                        </span>:
+                        <span style={{backgroundColor: '#ff6348'}} className='btn btn-danger btn-sm'>
+                            <FontAwesomeIcon icon={faCommentSlash}></FontAwesomeIcon> Comments Disabled
+                        </span>}
+
+                        {item.Allow_Ads?
+                        <span style={{backgroundColor: '#f368e0'}} className='btn btn-success btn-sm'>
+                            <FontAwesomeIcon icon={faStore}></FontAwesomeIcon> Ads Enabled
+                        </span>:
+                        <span className='btn btn-danger btn-sm'>
+                            <FontAwesomeIcon icon={faStoreSlash}></FontAwesomeIcon> Ads Disabled
+                        </span>}
+                        
+                            <div className='float-md-end'>
+                                <a href='#' onClick={() => EditCategory(item.Category_id)} style={{backgroundColor: '#5f27cd'}} className='btn btn-success btn-sm'>
+                                <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
+                                </a>
+                                <a href='#' onClick={() => DeleteCategory(item.Category_id)} className='btn btn-danger btn-sm' >
+                                <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
+                                </a>
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                    ))}
+                </div>
+            {/* End body */}
+            
+        </div>
+    </>
   )
 }
+
+
+{/* <div className='container manage-container'>
+    
+    
+    <div className='table-responsive'>
+    <div className='form-group'>
+      <div className='col-sm-2'>
+        <button className='btn btn-primary btn-sm' onClick={() => AddCategory()}>
+          <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon> New Member
+          </button>
+      </div>
+    </div>
+  
+      <Table striped bordered hover className='main-table table table-bordered text-center'>
+        
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Ordering</th>
+            <th>Visible</th>
+            <th>Allow Comments</th>
+            <th>Allow Ads</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          {category.map(item => (
+              <tr>
+              <td className='counterCell'></td>
+              <td>{item.Name}</td>
+              <td>{item.Description}</td>
+              <td>{item.Ordering}</td>
+              <td>{String(item.Visible)}</td>
+              <td>{String(item.Allow_Comments)}</td>
+              <td>{String(item.Allow_Ads)}</td>
+              <td>
+              <div>
+                  <a href='#' className='btn btn-success btn-sm'>
+                  <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
+                      </a>
+                  <a href='#' className='btn btn-danger btn-sm' >
+                  <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
+                      </a>
+                  </div>
+              </td>
+              </tr>
+          ))}
+        
+        </tbody>
+      </Table>
+    </div>
+  </div> */}

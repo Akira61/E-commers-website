@@ -8,7 +8,7 @@ export function language(phrase){
         "home" : "Home",
         "categories"  : "Categories",
         "items" : "Products",
-        "members" : "Members",
+        "members" : "Staff",
         "statistics" : "Statistics",
         "logs" : "Logs",
         "Edit Profile" : "Edit Profile",

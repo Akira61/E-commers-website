@@ -152,6 +152,10 @@ app.use("/", require("./routes/user/lastUsersAdded"));
     app.use("/", require("./routes/admin/categories/new.category"));
     //get categories
     app.use("/", require("./routes/admin/categories/get.categories"));
+    //Edit categories
+    app.use("/", require("./routes/admin/categories/edit.categories"));
+    //Delete Category
+    app.use("/", require("./routes/admin/categories/delete.category"))
 
 //
 

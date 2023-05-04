@@ -3,3 +3,31 @@
 .switch-color:checked{
     background-color: #fdcb6e;
 }
+
+.categories{
+    margin-bottom: 60px;
+}
+
+
+
+.categories-body{
+    padding: 15px;
+    position: relative;
+    
+}
+.ordering a{
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.categories-body hr{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+
+/* don't desplay the last <hr/> */
+.categories:last-of-type ~hr{
+    display: none;
+}

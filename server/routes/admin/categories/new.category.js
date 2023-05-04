@@ -30,6 +30,7 @@ router.post("/admin/categories/new-category", loggedIn, adminRole, async(req, re
 
     // insert category
     NewCategory(name, visible, description, ordering, allowComments, allowAds);
+    res.status(200).json({success: true});
 
 })
 
