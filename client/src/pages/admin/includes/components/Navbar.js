@@ -43,7 +43,7 @@ export default function Navbar_() {
           <Nav className="me-auto my-2 my-lg-0">
 
             <Nav.Link href={adminUrl.dashboard}>{language("home")}</Nav.Link>
-            <Nav.Link href="#action2">{language("categories")}</Nav.Link>
+            <Nav.Link href="/admin/categories">{language("categories")}</Nav.Link>
             <Nav.Link href={adminUrl.productsDashboard}>{language("items")}</Nav.Link>
             <Nav.Link href={adminUrl.manageStaff}>{language("members")}</Nav.Link>
             <Nav.Link href="#action2">{language("statistics")}</Nav.Link>

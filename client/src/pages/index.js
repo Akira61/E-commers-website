@@ -10,7 +10,7 @@ export default function Index() {
 
         getData()
         async function getData(){
-            const req = await fetch("http://localhost:4000/api/products");
+            const req = await fetch("http://localhost:4000/products");
             const res = await req.json();
             console.log(res);
             setData(res);

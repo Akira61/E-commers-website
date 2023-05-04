@@ -6,8 +6,8 @@ export function language(phrase){
         // admin navbar dashboard
         "admin_title" : "Admin",
         "home" : "Home",
-        "categories"  : "sections",
-        "items" : "Items",
+        "categories"  : "Categories",
+        "items" : "Products",
         "members" : "Members",
         "statistics" : "Statistics",
         "logs" : "Logs",

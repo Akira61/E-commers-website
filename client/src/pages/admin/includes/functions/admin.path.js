@@ -7,10 +7,10 @@
  */
 
 export const adminUrl = {
-    serverHost          : "http://localhost",
+    serverHost          : "http://localhost:4000",
     dashboard           : "/admin/dashboard",
     manageStaff         : "/admin/staff/manage",
-    members             : "/staff/members",
     productsDashboard   : "/admin/products",
+    categories          : "/admin/categories"
 
 }

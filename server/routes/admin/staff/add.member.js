@@ -13,7 +13,8 @@ router.post('/staff/manage/add-member', async(req, res) => {
     const {username} = req.body;
     const {name} = req.body;
     const {password} = req.body;
-    const {role} = req.body;    
+    let {role} = req.body;
+    let {admin} = req.body;    
     console.log(req.body);
 
     if(req.session.user.role === "user"){
@@ -40,6 +41,12 @@ router.post('/staff/manage/add-member', async(req, res) => {
     const emailExists = await User.findOne({where : {username}});
     if(emailExists){
         return res.json({err_message : "Email already exists"})
+    }
+
+
+    //ceck if not admin change role to normal user
+    if(!admin){
+        role = 'user';
     }
     // password will be hashed by the function
     insertUser(name , username, password, role);

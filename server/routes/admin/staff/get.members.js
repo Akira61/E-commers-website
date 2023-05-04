@@ -6,11 +6,11 @@ const {Op} = require("sequelize");
 const path = require("path");
 const { User, insertUser } = require("../../../database/models/register");
 const checkItem = require("../../../config/check.existing.item");
+const latestItem = require("../../../config/latest.item");
 const router = express.Router();
 
 
 router.get('/staff/members', adminRole, async(req, res) => {
-
     //get members
     const members = await User.findAll({
         where : {role : {[Op.not] : 'user'}, 
@@ -45,6 +45,8 @@ router.get("/admin/get-member/:memberId",adminRole, async(req, res) => {
         // member not found
         res.status(404).json({err_message : "Member not found"});
     }
-})
+});
+
+
 
 module.exports = router;

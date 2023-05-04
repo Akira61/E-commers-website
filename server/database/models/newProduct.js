@@ -48,5 +48,6 @@ function addProduct(name, price, visible, description, fileData, fileName){
  
  
 module.exports.addProduct = addProduct;
+module.exports.Products = newProduct;
 
 

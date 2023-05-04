@@ -31,7 +31,6 @@ router.put("/admin/edit-member", adminRole, async (req, res) => {
         // don't include current user
         
     });
-    console.log(emailExists.user_id !== memberId);
 
     // check if email exists and the email doesn't equal the current member email
     if(emailExists && emailExists.user_id !== memberId){

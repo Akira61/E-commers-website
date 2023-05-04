@@ -7,12 +7,12 @@ const router = express.Router();
 
 
 
-router.get("/api/products",adminRole,(req, res) => {
+router.get("/products",adminRole,(req, res) => {
     const query = "select * FROM products";
-
+ 
     makeQuery.query(query, (err, result) => {
         if(err) throw err;
-        res.send(result)
+        res.json(result)
     })
 })
  

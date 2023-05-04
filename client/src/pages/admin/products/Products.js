@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Navbar_ from '../includes/components/Navbar';
 
 export default function Products() {
 
@@ -9,7 +10,7 @@ export default function Products() {
   
   useEffect(() => {
     // get products info
-    fetch("http://localhost:4000/api/products")
+    fetch("http://localhost:4000/products")
     .then(res=> res.json())
     .then(data => {
       console.log(data);
@@ -26,6 +27,7 @@ export default function Products() {
       icon : 'info',
       iconColor : 'green',
       title: 'بيانات المنتج',
+      showCloseButton: true,
       html:
       '<div> <label> جاهز للعرض؟ <br/> <input type="checkbox" id="visible-input"> </label> </div><br/>'+
       '<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input"> </label> </div><br/>' +
@@ -88,6 +90,7 @@ export default function Products() {
     const { value : updatedData } = await Swal.fire({
       icon : 'question',
       title : 'تعديل بيانات المنتج',
+      showCloseButton: true,
       html : 
       `<div> <label> جاهز للعرض؟ <br/> <input type="checkbox" id="visible-input" checked=${data.visible}> </label> </div><br/>`+
       `<div> <label>اسم المنتج <br/> <input id="name-input" class="swal2-input" value="${data.name}" > </label> </div><br/>` +
@@ -152,6 +155,7 @@ export default function Products() {
       iconColor : 'red',
       title : 'هل انت متأكد؟',
       showCancelButton : true,
+      showCloseButton: true,
       cancelButtonText : 'الغاء'
     });
 
@@ -163,7 +167,7 @@ export default function Products() {
 
   return (
     <div>
-    
+      <Navbar_ />
       <button onClick={() => newProduct()}>New product</button>
 
       <div>

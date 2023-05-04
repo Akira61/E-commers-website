@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import "./css/login.css"
 import { adminUrl } from '../admin/includes/functions/admin.path';
-import { csrf } from '../admin/includes/functions/csrf';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -14,9 +13,9 @@ export default function Login() {
       auth() // check if user logged in
       async function auth(){
         const response = await fetch('http://localhost:4000/check-role', {credentials : "include",});
-        const validation = await response.text();
+        const validation = await response.json();
         console.log(validation)
-        if(validation){
+        if(validation.role){
           navigate(adminUrl.dashboard);
         }
       }

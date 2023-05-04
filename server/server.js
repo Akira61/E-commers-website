@@ -58,10 +58,16 @@ app.get("/check-role", (req, res) => {
     // if(role !== 'admin'){
     //    return res.status(401).send("you don't have a pormision")
     // }
+    let isAdmin = false;
+    if(role){
+        if(role !== 'user'){
+            isAdmin = true;
+        }
+    }
     console.log("^".repeat(30),role);
-    res.send(role);
+    res.json({role,isAdmin});
 })
-
+ 
 //user's id
 app.get("/userID",loggedIn,(req, res) => {
 
@@ -126,6 +132,8 @@ app.use("/", require("./routes/user/edit.profile"));
 // edit user password
 app.use("/", require("./routes/user/edit.password"));
 
+//get last add users in the database
+app.use("/", require("./routes/user/lastUsersAdded"));
 
 // staff
     //add new staff member
@@ -136,6 +144,15 @@ app.use("/", require("./routes/user/edit.password"));
     app.use("/", require('./routes/admin/staff/edit.member'));
     //delete Member :(
     app.use("/", require("./routes/admin/staff/delete.member"));
+//
+
+
+// Categories
+    //add new category
+    app.use("/", require("./routes/admin/categories/new.category"));
+    //get categories
+    app.use("/", require("./routes/admin/categories/get.categories"));
+
 //
 
 
