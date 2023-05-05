@@ -207,80 +207,87 @@ export default function Products() {
 <h1 className='text-center'>Manage Products</h1>
 
 {/* Table */}
-<div className='container manage-container'>
-    
-  {/* add new Product button */}
-  <div className='table-responsive'>
-  <div className='form-group'>
-    <div className='col-sm-2'>
-      <button className='btn btn-primary btn-sm' onClick={() => newProduct()}>
-        <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon> New Product
-        </button>
-    </div>
-  </div>
-
-    <Table striped bordered hover className='main-table table table-bordered text-center'>
-      {/* table headers */}
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Image</th>
-          <th>Name</th>
-          <th>price</th>
-          <th>Description</th>
-          <th>Visible</th>
-          <th>Controls</th>
-        </tr>
-      </thead>
-      {/* table info */}
-      <tbody>
+      <div className='container'>
         {data.map(element => (
-            <tr>
-            <td className='counterCell'></td>
-            <td><img src={`/uploads/${element.fileName}`} style={{width:'50%', objectFit:'cover'}} id='product-img'/></td>
-            <td>{element.name}</td>
-            <td><span>{element.price}</span></td>
-            <td>{element.description}</td>
-            <td><input type="checkbox" checked={element.visible} value={element.visible}/> <label>Visible</label></td>
-            <td>
-            <div>
-                <a href='#' className='btn btn-success btn-sm' onClick={() => editProduct(element.product_id)}>
-                <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
-                    </a>
-                <a href='#' className='btn btn-danger btn-sm' onClick={() => deleteProduct(element.product_id)}>
-                <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
-                    </a>
-                </div>
-            </td>
-            </tr>
+          <div class="card" style={{width : '18rem', borderRadius: '5px'}}>
+            <div class="card" onClick={() => editProduct(element.product_id)} style={{cursor:"pointer"}}>
+              <img src={`/uploads/${element.fileName}`} style={{borderRadius: '5px'}}/>
+              <div class="card-body">
+                <h5 class="card-title">{element.name}</h5>
+                <span>${element.price}</span>
+                <p class="card-text">{element.description}</p>
+              </div>
+            </div>
+              <div>
+                    <a href='#' className='btn btn-success btn-sm' onClick={() => editProduct(element.product_id)}>
+                    <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
+                        </a>
+                    <a href='#' className='btn btn-danger btn-sm' onClick={() => deleteProduct(element.product_id)}>
+                    <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
+                        </a>
+                        <input type="checkbox" checked={element.visible} value={element.visible}/> <label>Visible</label>
+                  </div>
+            
+          </div>
         ))}
-      
-      </tbody>
-    </Table>
-  </div>
-</div>
-
-      {data.map(element => (
-        <div class="card" style={{width : '18rem', borderRadius: '5px'}}>
-         <img src={`/uploads/${element.fileName}`} style={{borderRadius: '5px'}}/>
-        <div class="card-body">
-          <h5 class="card-title">{element.name}</h5>
-          <span>${element.price}</span>
-          <p class="card-text">{element.description}</p>
-          <div>
-                <a href='#' className='btn btn-success btn-sm' onClick={() => editProduct(element.product_id)}>
-                <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
-                    </a>
-                <a href='#' className='btn btn-danger btn-sm' onClick={() => deleteProduct(element.product_id)}>
-                <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
-                    </a>
-                    <input type="checkbox" checked={element.visible} value={element.visible}/> <label>Visible</label>
-                </div>
-        </div>
-        
       </div>
-      ))}
 
     </div>
   )
 }
+
+
+
+{/* <div className='container manage-container'>
+    
+    
+    <div className='table-responsive'>
+    <div className='form-group'>
+      <div className='col-sm-2'>
+        <button className='btn btn-primary btn-sm' onClick={() => newProduct()}>
+          <FontAwesomeIcon icon={faAdd}></FontAwesomeIcon> New Product
+          </button>
+      </div>
+    </div>
+  
+      <Table striped bordered hover className='main-table table table-bordered text-center'>
+        
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>price</th>
+            <th>Description</th>
+            <th>Visible</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+       
+        <tbody>
+          {data.map(element => (
+              <tr>
+              <td className='counterCell'></td>
+              <td><img src={`/uploads/${element.fileName}`} style={{width:'50%', objectFit:'cover'}} id='product-img'/></td>
+              <td>{element.name}</td>
+              <td><span>{element.price}</span></td>
+              <td>{element.description}</td>
+              <td><input type="checkbox" checked={element.visible} value={element.visible}/> <label>Visible</label></td>
+              <td>
+              <div>
+                  <a href='#' className='btn btn-success btn-sm' onClick={() => editProduct(element.product_id)}>
+                  <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit
+                      </a>
+                  <a href='#' className='btn btn-danger btn-sm' onClick={() => deleteProduct(element.product_id)}>
+                  <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
+                      </a>
+                  </div>
+              </td>
+              </tr>
+          ))}
+        
+        </tbody>
+      </Table>
+    </div>
+  </div> 
+*/}

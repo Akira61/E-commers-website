@@ -205,17 +205,17 @@ export default function ManageCategories() {
                   </div>
                   <div class="form-group col-md-6">
                   <div class="form-check form-switch">
-                    <input class="form-check-input Visible switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Visible)}>
+                    <input class="form-check-input Visible switch-color" type="checkbox" id="checkBox" ${data.Visible? 'checked':false}>
                     <label class="form-check-label" for="checkBox">Visible</label>
                   </div>
                 
                   <div class="form-check form-switch">
-                    <input class="form-check-input allow-comments switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Allow_Comments)}>
+                    <input class="form-check-input allow-comments switch-color" type="checkbox" id="checkBox" ${data.Allow_Comments ? 'checked' : false}>
                     <label class="form-check-label" for="checkBox">Allow Comments</label>
                   </div>
                   
                   <div class="form-check form-switch">
-                    <input class="form-check-input allow-ads switch-color" type="checkbox" id="checkBox" checked=${Boolean(data.Allow_Ads)}>
+                    <input class="form-check-input allow-ads switch-color" type="checkbox" id="checkBox" ${data.Allow_Ads? 'checked':false}>
                     <label class="form-check-label" for="checkBox">Allow Ads</label>
                   </div>
                   </div>
