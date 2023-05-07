@@ -5,7 +5,11 @@
     border: 1px solid #ccc;
     padding: 10px;
     font-size: 15px;
+    position: relative;
+    overflow: hidden;
 }
+
+
 
 .home-stats .stat a{
     color: #fff;

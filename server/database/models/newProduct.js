@@ -24,7 +24,7 @@ const newProduct = db.define("products", {
         type : DataTypes.STRING,
     },
     rating : {
-        type : DataTypes.SMALLINT
+        type : DataTypes.INTEGER
     },
     category_id : {
         type : DataTypes.INTEGER
@@ -39,9 +39,21 @@ const newProduct = db.define("products", {
         type: DataTypes.STRING,
     }
 });
+ 
+// addProduct("d",3,false,'ds','df','df')
+function addProduct(name, price, visible, description, fileData, fileName,rating=5, member_id=null, category_id=null){
 
-  
-function addProduct(name, price, visible, description, fileData, fileName, member_id=1, category_id=1){
+    //foreign key
+    // const query = `
+    // ALTER TABLE products 
+    // ADD  CONSTRAINT Cate
+    // FOREIGN KEY(category_id) REFERENCES categories(id)
+    // ON UPDATE CASCADE
+    // ON DELETE CASCADE`
+    // makeQuery.query(query, (err, result) => {
+    //     if(err) throw err;
+    //     console.log(result);
+    // })
     // create the table. use {force : true} inside sync() to reset database
     db.sync();
     // change fileData datatype
@@ -50,21 +62,22 @@ function addProduct(name, price, visible, description, fileData, fileName, membe
     //create product
     newProduct.create({
         product_id : uuid(),
-        name : name,
+        name : name, 
         price : price,
         visible : visible,
         description : description,
+        rating : rating,
         fileData : fileData,
         fileName : fileName,
-        category_id : category_id,
         member_id : member_id,
+        category_id : category_id,
     }).then((result) => {
         console.log("product added successfully! ", result)
     }).catch(err => {
         console.log({"adding product error " : err})
     })
 }
- 
+
  
 module.exports.addProduct = addProduct;
 module.exports.Products = newProduct;

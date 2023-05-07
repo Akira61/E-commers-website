@@ -60,9 +60,6 @@ export default function ManageCategories() {
                       <input type="text" class="form-control" id="name" placeholder="Name" required>
                   </div>
                   <div class="form-group col-md-6">
-                      <input type="number" class="form-control" id="Ordering" placeholder="Ordering" required>
-                  </div>
-                  <div class="form-group col-md-6">
                       <textarea class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;"></textarea>
                   </div>
                   </div>
@@ -89,7 +86,6 @@ export default function ManageCategories() {
             preConfirm: () => {
                 return {
                 name : document.getElementById('name').value,
-                ordering : document.getElementById('Ordering').value,
                 description : document.getElementById('description').value,
                 visible : document.querySelector('.Visible').checked,
                 allowComments : document.querySelector('.allow-comments').checked,
@@ -99,7 +95,7 @@ export default function ManageCategories() {
         });
         console.log(insertCategory);
         // check fields
-        if(!insertCategory.name || !insertCategory.ordering || !insertCategory.description){
+        if(!insertCategory.name || !insertCategory.description){
           const warning = await Swal.fire({
             icon : 'warning',
             iconColor : 'red',
@@ -121,7 +117,6 @@ export default function ManageCategories() {
           body : JSON.stringify({
             userId,
             name : insertCategory.name,
-            ordering : insertCategory.ordering,
             description : insertCategory.description,
             visible : insertCategory.visible,
             allowComments : insertCategory.allowComments,
@@ -197,25 +192,22 @@ export default function ManageCategories() {
                       <input type="text" class="form-control" id="name" placeholder="Name" value="${data.Name}" required>
                   </div>
                   <div class="form-group col-md-6">
-                      <input type="number" class="form-control" id="Ordering" placeholder="Ordering" value = ${data.Ordering} required>
-                  </div>
-                  <div class="form-group col-md-6">
                       <textarea class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${data.Description}</textarea>
                   </div>
                   </div>
                   <div class="form-group col-md-6">
                   <div class="form-check form-switch">
-                    <input class="form-check-input Visible switch-color" type="checkbox" id="checkBox" ${data.Visible? 'checked':false}>
+                    <input class="form-check-input Visible switch-color" type="checkbox" id="checkBox" ${data.Visible? 'checked':''}>
                     <label class="form-check-label" for="checkBox">Visible</label>
                   </div>
                 
                   <div class="form-check form-switch">
-                    <input class="form-check-input allow-comments switch-color" type="checkbox" id="checkBox" ${data.Allow_Comments ? 'checked' : false}>
+                    <input class="form-check-input allow-comments switch-color" type="checkbox" id="checkBox" ${data.Allow_Comments ? 'checked':''}>
                     <label class="form-check-label" for="checkBox">Allow Comments</label>
                   </div>
                   
                   <div class="form-check form-switch">
-                    <input class="form-check-input allow-ads switch-color" type="checkbox" id="checkBox" ${data.Allow_Ads? 'checked':false}>
+                    <input class="form-check-input allow-ads switch-color" type="checkbox" id="checkBox" ${data.Allow_Ads? 'checked':''}>
                     <label class="form-check-label" for="checkBox">Allow Ads</label>
                   </div>
                   </div>
@@ -226,16 +218,12 @@ export default function ManageCategories() {
             preConfirm: () => {
                 return {
                 name : document.getElementById('name').value,
-                ordering : document.getElementById('Ordering').value,
                 description : document.getElementById('description').value,
                 visible : document.querySelector('.Visible').checked,
                 allowComments : document.querySelector('.allow-comments').checked,
                 allowAds : document.querySelector('.allow-ads').checked,
                 }}
             });
-                if(!data.Visible){
-                    category.value.visible = false;
-                }
         
                 //send new data
                 if(category.isConfirmed){
@@ -247,8 +235,8 @@ export default function ManageCategories() {
                     body : JSON.stringify({
                     Name : category.value.name,
                     Description : category.value.description,
-                    Ordering : category.value.ordering,
                     Allow_Ads : category.value.allowAds,
+                    Visible : category.value.visible,
                     Allow_Comments : category.value.allowComments,
                     userId,
                     Category_id,
@@ -365,27 +353,27 @@ export default function ManageCategories() {
                         {/* <span>{item.Ordering}</span> */}
 
                         {item.Visible?
-                        <span className='btn btn-success btn-sm'>
+                        <span style={{cursor:'text'}} className='btn btn-success btn-sm'>
                             <FontAwesomeIcon icon={faEye}></FontAwesomeIcon> Visible
                         </span>:
-                        <span className='btn btn-danger btn-sm'>
+                        <span style={{cursor:'text'}} className='btn btn-danger btn-sm'>
                             <FontAwesomeIcon icon={faEyeSlash}>
                             </FontAwesomeIcon> Hidden
                         </span>}
 
                         {item.Allow_Comments?
-                        <span style={{backgroundColor: '#ff9f43'}} className='btn btn-success btn-sm'>
+                        <span style={{backgroundColor: '#ff9f43', cursor:'text'}} className='btn btn-success btn-sm'>
                             <FontAwesomeIcon icon={faComment}></FontAwesomeIcon> Comments Enabled
                         </span>:
-                        <span style={{backgroundColor: '#ff6348'}} className='btn btn-danger btn-sm'>
+                        <span style={{backgroundColor: '#ff6348', cursor:'text'}} className='btn btn-danger btn-sm'>
                             <FontAwesomeIcon icon={faCommentSlash}></FontAwesomeIcon> Comments Disabled
                         </span>}
 
                         {item.Allow_Ads?
-                        <span style={{backgroundColor: '#f368e0'}} className='btn btn-success btn-sm'>
+                        <span style={{backgroundColor: '#f368e0', cursor:'text'}} className='btn btn-success btn-sm'>
                             <FontAwesomeIcon icon={faStore}></FontAwesomeIcon> Ads Enabled
                         </span>:
-                        <span className='btn btn-danger btn-sm'>
+                        <span style={{cursor:'text'}} className='btn btn-danger btn-sm'>
                             <FontAwesomeIcon icon={faStoreSlash}></FontAwesomeIcon> Ads Disabled
                         </span>}
                         

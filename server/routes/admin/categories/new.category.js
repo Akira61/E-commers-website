@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 router.post("/admin/categories/new-category", loggedIn, adminRole, async(req, res) => {
-    const {name,ordering,description,
+    const {name,description,
     visible,allowComments,allowAds, userId} = req.body;
 
     // check user_id sent
@@ -17,7 +17,7 @@ router.post("/admin/categories/new-category", loggedIn, adminRole, async(req, re
         return res.status(401).json({err_message : "unautheraized"});
     }
     //check if fields filled
-    if(!name || !ordering || !description){
+    if(!name || !description){
         return res.status(500).json({err_message : "Please Complete The Form"});
     }
     
@@ -29,7 +29,7 @@ router.post("/admin/categories/new-category", loggedIn, adminRole, async(req, re
     }
 
     // insert category
-    NewCategory(name, visible, description, ordering, allowComments, allowAds);
+    NewCategory(name, visible, description, allowComments, allowAds);
     res.status(200).json({success: true});
 
 })

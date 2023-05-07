@@ -17,5 +17,7 @@ export async function isAdmin(direction, navigate){
   else if(!validation.role){
     return navigate('/login');
   }
-  return navigate(direction); // user is admin
+  
+  navigate(direction); // user is admin
+  return true
 };

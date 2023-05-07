@@ -22,10 +22,6 @@ const category = db.define("categories",{
         defaultValue : 'No Description Found'
     },
 
-    Ordering : {
-        type : DataTypes.FLOAT,
-    },
-
     Visible : {
         type : DataTypes.BOOLEAN,
         allowNull : false,
@@ -45,9 +41,8 @@ const category = db.define("categories",{
     }
 
 });
-
-
-function NewCategory(Name, visible, description, Ordering, Allow_Comments, Allow_Ads){
+  
+function NewCategory(Name, visible, description, Allow_Comments, Allow_Ads){
     // create the table. use {force : true} inside sync() to reset database
     db.sync();
     
@@ -55,8 +50,7 @@ function NewCategory(Name, visible, description, Ordering, Allow_Comments, Allow
     category.create({
         Category_id : uuid(),
         Name : Name,
-        Description : description, 
-        Ordering : Ordering, 
+        Description : description,  
         Visible : visible, 
         Allow_Comments : Allow_Comments,
         Allow_Ads : Allow_Ads
@@ -66,7 +60,7 @@ function NewCategory(Name, visible, description, Ordering, Allow_Comments, Allow
         console.log({"adding product error " : err})
     })
 }
- 
+  
 
 module.exports.NewCategory = NewCategory;
 module.exports.Categories = category;

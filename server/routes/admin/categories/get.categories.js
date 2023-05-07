@@ -30,7 +30,7 @@ router.get("/admin/categories/get-all", loggedIn,adminRole, async(req, res) => {
 
     //send data
     res.status(200).json(categories);
-})
+}) 
 
 router.get('/admin/categories/get-one', loggedIn, adminRole, async(req, res) => {
     const {id} = req.query;

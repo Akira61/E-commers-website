@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.put("/admin/categories/Edit-category", loggedIn, adminRole, async(req, res) => {
     const {Category_id} = req.body;
-    const {Name, Ordering,
+    const {Name,
     Description,Visible,
     Allow_Comments, Allow_Ads, userId} = req.body;
     
@@ -28,7 +28,7 @@ router.put("/admin/categories/Edit-category", loggedIn, adminRole, async(req, re
 
     if(Category_id){
         const updateCate = await Categories.update({
-            Name, Ordering, Description,
+            Name, Description,
             Visible, Allow_Ads, Allow_Comments
         },
         {where : {Category_id}}
