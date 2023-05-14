@@ -27,27 +27,27 @@ const Comment = db.define("comments", {
     },
 });
 
-insertComment("test",true,1,1);
 async function insertComment(comment, visible, product_id,user_id){
 
     //foriegn key
-    const query = `
-    ALTER TABLE comments
-    ADD  CONSTRAINT user
-    FOREIGN KEY(user_id) REFERENCES users(id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE;
-    ALTER TABLE comments
-    ADD  CONSTRAINT product
-    FOREIGN KEY(product_id) REFERENCES products(id)
-    ON UPDATE CASCADE
-    ON DELETE CASCADE;
-    `
-    makeQuery.query(query, (err, result) => {
-        if(err) throw err;
-        console.log("FOREIGN key created")
-        console.log(result)
-    });
+    // const query = `
+    // ALTER TABLE comments
+    // ADD  CONSTRAINT user
+    // FOREIGN KEY(user_id) REFERENCES users(id)
+    // ON UPDATE CASCADE
+    // ON DELETE CASCADE;
+    // ALTER TABLE comments
+    // ADD  CONSTRAINT product
+    // FOREIGN KEY(product_id) REFERENCES products(id)
+    // ON UPDATE CASCADE
+    // ON DELETE CASCADE;
+    // `
+    // makeQuery.query(query, (err, result) => {
+    //     if(err) throw err;
+    //     console.log("FOREIGN key created")
+    //     console.log(result)
+    // });
+    
     db.sync()
     Comment.create({
         comment_id : uuid(),
@@ -62,7 +62,7 @@ async function insertComment(comment, visible, product_id,user_id){
     }).catch(err => {
         console.log(err)
     })
-}
+} 
 
 module.exports.inserComment = insertComment;
 module.exports.Comment = Comment;

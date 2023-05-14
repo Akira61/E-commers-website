@@ -1,13 +1,13 @@
 const express = require("express");
 const {makeQuery} = require("../../../server");
-const { adminRole } = require("../../../config/checkRole");
+const { adminRole, loggedIn } = require("../../../config/checkRole");
 const {Op} = require("sequelize");
 const {v4 : uuid} = require("uuid");
 const path = require("path");
 const { User, insertUser } = require("../../../database/models/register");
 const router = express.Router();
 
-router.put("/admin/edit-member", adminRole, async (req, res) => {
+router.put("/admin/edit-member",loggedIn, adminRole, async (req, res) => {
     const {name} = req.body;
     const {username} = req.body;
     const {role} = req.body;
@@ -35,6 +35,11 @@ router.put("/admin/edit-member", adminRole, async (req, res) => {
     // check if email exists and the email doesn't equal the current member email
     if(emailExists && emailExists.user_id !== memberId){
         return res.json({err_message : "Email already exists"})
+    }
+
+    //check if name alerady exists
+    if(emailExists.dataValues.name == name){
+        return res.json({err_message : "Name Already Exists"})
     }
 
     // update 

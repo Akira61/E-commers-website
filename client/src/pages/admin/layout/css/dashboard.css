@@ -9,7 +9,10 @@
     overflow: hidden;
 }
 
-
+.home-stats{
+    display: grid;
+    grid-template-columns: none;
+}
 
 .home-stats .stat a{
     color: #fff;
@@ -63,4 +66,23 @@
 }
 .latest-users li:nth-child(odd){
     background-color: #EEE;
+}
+
+.latest .comment-box{
+    margin: 5px 0 10px;
+    
+}
+.latest .comment-box .button{
+    text-decoration: none;
+}
+
+
+.latest .comment-name{
+    margin: 20px;
+}
+.latest .comment{
+    background-color: #EEE;
+    border-radius: 5px;
+    margin: 25px;
+   
 }

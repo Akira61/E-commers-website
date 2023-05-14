@@ -6,7 +6,7 @@ import Navbar from './includes/components/Navbar';
 import { adminUrl } from './includes/functions/admin.path';
 import "./layout/css/dashboard.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faClock, faCommentDots, faTag, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faClock, faComment, faCommentDots, faCommentMedical, faInfo, faShop, faTag, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faAdd, faEdit, faRemove } from '@fortawesome/free-solid-svg-icons';
 import { EditMember } from './includes/functions/CRUD.member';
 import { isAdmin } from './includes/functions/IsAdmin';
@@ -20,8 +20,10 @@ export default function Dashboard() {
     const [product, setProduct] = useState();
     const [lastRegistered, setlastRegistered] = useState([]);
     const [lastProducts, setLastProducts] = useState([]);
+    const [lastComments, setLastComments] = useState([]);
     useEffect(() =>{
-
+        // title
+        document.title = 'Admin';
         //auth()
         // async function auth(){
         //   const response = await fetch(adminUrl.serverHost + '/check-role', {credentials : "include"});
@@ -102,6 +104,18 @@ export default function Dashboard() {
             if(data){
               setLastProducts(data);
             }
+          }
+
+          //Latest Comments
+          LatestComments()
+          async function LatestComments(){
+            const response = await fetch(adminUrl.serverHost + "/comments/get-all?limit=5&sort=DESC",{
+              credentials: 'include'
+            });
+            //parse the response
+            const data = await response.json();
+            console.log(data);
+            setLastComments(data);
           }
       },[]);
 
@@ -196,7 +210,6 @@ export default function Dashboard() {
         formData.append('rating', updatedData.rating);
         formData.append('category', updatedData.category);
 
-
       const response =await fetch(`http://localhost:4000/update-product/${productId}`, {
         method: "PUT",
         credentials : "include",
@@ -220,16 +233,42 @@ export default function Dashboard() {
       });
     }
   }
+
+  //show comments
+  async function commentDetails(product_id){
+    const response  = await fetch(adminUrl.serverHost + `/comments/get-one?product_id=${product_id}`, {
+      credentials : "include"
+    });
+    const comments = await response.json();
+
+    const { value : updatedData } = await Swal.fire({
+      title : "Product Comments",
+      showCloseButton: true,
+      html : 
+      `<form>
+      ${comments.map(comment => (
+      `<div class="form-group col-md-6">
+          Name :
+          <div class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${comment.name}</div>
+          Email : 
+          <div class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${comment.username}</div>
+          Comment : 
+           <div class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${comment.comment}</div>
+          <hr/>
+        </div>`
+      ))}
+    </form>`,
+    });
+  }
   return (
     <>
     
-    <title>Admin</title>
         <Navbar />
         <Header />
         
         <h1 className='text-center'>Dashboard</h1>
         <div className='container home-stats text-center'>
-          <div className='stat-container '>
+          <div className='stat-container'>
           <div className='row '>
             <div className='col-md-3'>
               <div className='stat st-members'>
@@ -284,6 +323,29 @@ export default function Dashboard() {
                         <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Eidt</span></li>
                     ))}
                   </ul>
+                </div>
+              </div>
+            </div>
+            <div className='col-sm-6'>
+              <div className='panel panel-default'>
+                <div className='panel-heading panel-header'>
+                  <FontAwesomeIcon icon={faComment}></FontAwesomeIcon> Latest Comments
+                </div>
+                <div className='panel-body'>
+                <ul className='list-unstyled latest-users'>
+      
+                    {lastComments.map(comment => (
+                      <div className='comment-box'>
+                        <span className=' comment-name '><FontAwesomeIcon icon={faUser}/> {comment.name}</span>
+                        <span onClick={() => commentDetails(comment.product_id)} className='button btn btn-link float-start  float-end btn-sm'>
+                        <FontAwesomeIcon icon={faCartPlus}/> {comment.product_name}
+                        </span>
+                        <p className='comment'>{comment.comment}</p> 
+                      </div>
+                      
+                    ))}
+                  </ul>
+                  
                 </div>
               </div>
             </div>

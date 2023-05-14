@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Navbar_ from '../includes/components/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faClipboard, faEdit, faEye, faEyeSlash, faRemove, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
-import Table from 'react-bootstrap/esm/Table';
+import { faAdd, faClipboard, faComment, faEdit, faEye, faEyeSlash, faRemove, faStar, faUser } from '@fortawesome/free-solid-svg-icons';
 import "../layout/css/products.css"
 import { adminUrl } from '../includes/functions/admin.path';
+import { isAdmin } from '../includes/functions/IsAdmin';
 
 export default function Products() {
 
@@ -14,8 +14,14 @@ export default function Products() {
   const navigate = useNavigate();
   
   useEffect(() => {
+
+    //check if admin
+    isAdmin(adminUrl.productsDashboard, navigate);
+
     // get products info
-    fetch("http://localhost:4000/products")
+    fetch("http://localhost:4000/products", {
+      credentials : 'include'
+    })
     .then(res=> res.json())
     .then(data => {
       console.log(data);
@@ -23,7 +29,6 @@ export default function Products() {
     })
     
   },[])
-
 
   // create new product
   async function newProduct(){
@@ -271,16 +276,41 @@ export default function Products() {
     const {value : deletedProduct } =await Swal.fire({
       icon : 'warning',
       iconColor : 'red',
-      title : 'هل انت متأكد؟',
+      title : 'Are You Sure ?',
       showCancelButton : true,
       showCloseButton: true,
-      cancelButtonText : 'الغاء'
     });
 
     if(deletedProduct){
-      const sendReq = await fetch(`http://localhost:4000/delete-product/${id}`, {method: "DELETE"});
+      const sendReq = await fetch(`http://localhost:4000/delete-product/${id}`, {
+        method: "DELETE",
+        credentials : 'include'
+      });
       console.log(sendReq);
     }
+  }
+
+
+  //show comments
+  async function showComments(product_id){
+    const response  = await fetch(adminUrl.serverHost + `/comments/get-one?product_id=${product_id}`, {
+      credentials : "include"
+    });
+    const comments = await response.json();
+
+    const { value : updatedData } = await Swal.fire({
+      title : "Product Comments",
+      showCloseButton: true,
+      html : 
+      `<form>
+      ${comments.map(comment => (
+      `<div class="form-group col-md-6">
+          ${comment.name} : <div class="form-control" id="description" placeholder="Description"  rows="5" cols="40" style="resize: none;" >${comment.comment}</div>
+          <hr/>
+        </div>`
+      ))}
+    </form>`,
+    });
   }
 
   return (
@@ -359,6 +389,9 @@ export default function Products() {
                         </a>
                     <a href='#' className='btn btn-danger btn-sm' onClick={() => deleteProduct(element.product_id)}>
                     <FontAwesomeIcon icon={faRemove}></FontAwesomeIcon> Delete
+                    </a>
+                    <a href='#' style={{backgroundColor: '#f368e0', color: '#FFF'}} className='btn btn-sm' onClick={() => showComments(element.id)}>
+                    <FontAwesomeIcon icon={faComment}></FontAwesomeIcon> Comments
                     </a>
                   </div>
             

@@ -11,12 +11,24 @@ export default function Navbar_() {
     
     const redirect = useNavigate()
     const [userID, setUserID] = useState("");
+    const [memberName, setMemberName] = useState();
     useEffect(() => {
         fetch("http://localhost:4000/userID",{credentials : "include",})// fetching user's id
         .then(res => res.text())
         .then(ID => {
             setUserID(ID);
         });
+
+        // name of the member
+        memberName()
+        async function memberName(){
+          const res = await fetch(`http://localhost:/admin/get-member/${userID}`,{
+            credentials : 'include'
+          });
+          const data = await res.json();
+          console.log("#:".repeat(3),data)
+          setMemberName(data.name);
+        }
     },[]);
 
     //edit profile
@@ -46,7 +58,7 @@ export default function Navbar_() {
             <Nav.Link href="/admin/categories">{language("categories")}</Nav.Link>
             <Nav.Link href={adminUrl.productsDashboard}>{language("items")}</Nav.Link>
             <Nav.Link href={adminUrl.manageStaff}>{language("members")}</Nav.Link>
-            <Nav.Link href="#action2">{language("statistics")}</Nav.Link>
+            <Nav.Link href={adminUrl.comments}>{language("comments")}</Nav.Link>
             <Nav.Link href="#action2">{language("logs")}</Nav.Link>
 
           </Nav>
@@ -55,6 +67,7 @@ export default function Navbar_() {
 
                 <NavDropdown title="Fahad" id="navbarScrollingDropdown">
                 <NavDropdown.Item href={`/edit-profile`} >{language("Edit Profile")}</NavDropdown.Item>
+                <NavDropdown.Item href="/">Visit Site</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">{language("Settings")}</NavDropdown.Item>
                 <NavDropdown.Item href="#action5" onClick={() => logout()}>{language("Logout")}</NavDropdown.Item>
                 </NavDropdown>

@@ -1,18 +1,8 @@
 
-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row-reverse;
-    width: 100%;
-    height: 50px;
-    position: fixed;
-    z-index: 10000;
-    padding: 10px 80px;
-    background-color: #f0f0f0;
-    
-}
 
+/* .navbar-edit{
+    background-color: black !important;
+} */
 
 .logo{
     font-size: 1.8em;
@@ -20,72 +10,9 @@ header{
     text-transform: uppercase;
     
 }
-nav{
-    font-weight: 500;
-    
-}
-nav a:hover{
-    color:darkviolet;
-}
-.close-menu{
-    display: none;
-}
-.menu{
-    display: none;
-}
 
-@media (max-width:800px){
-    .menu{
-        display: block;
-        position: absolute;
-        opacity: 1;
-        top: 20px;
-        right: 20px;
-    }
-   
-    
-    header{
-        flex-direction: column;
-        padding: 5px;
-        width: 100%;
-        text-align: center;
-        
-    }
-    header nav{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        position: fixed;
-        margin-top: 0;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        gap: .70rem;
-        transition: 1s;
-        transform: translateY(-100vh);
-        background: darkcyan;
-    }
-    
-    header .openMenu{
-        transform: none;
-    }
-    .nav-item{
-        transform: none;
-    }
-    /* .close-menu{
-        visibility: visible;
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-    } */
 
-    nav a{
-        font-size: 1.5rem;
-        
-    }
-}
+
 
 a{
     list-style: none;

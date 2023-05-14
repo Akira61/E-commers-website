@@ -15,20 +15,35 @@ router.post("/register", async (req, res) => {
     const {username} = req.body;
     const {password} = req.body;
     const {confirmPass} = req.body;
-    
+
+    //check if user logged in
+    if(req.session.auth){
+        return res.json({err_message : "Already logged in"});
+    }
+
     console.log(name, username, password, confirmPass);
 
-    if(!name || !username || !password || !confirmPass){
-        return res.send("please feil the inputs"); 
+    if(!name || !username || !password.trim().length || !confirmPass.trim().length){
+        return res.json({err_message : "please feil the inputs"}); 
+    }
+
+    //check valid email
+    const emailRegx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(!emailRegx.test(username)){
+        return res.json({err_message : "Please enter a correct email"});
     }
     if(password !== confirmPass){
-        return res.send("password does not match");
+        return res.json({err_message : "Passwords does not match"});
+    }
+
+    if(password.length < 6){
+        return res.json({err_message : "Password must be 6 characters or longer"});
     }
 
     //check if username already in the database
     const emailExists = await User.findOne({where : {username}});
     if(emailExists){
-        return res.send("Email already exists");
+        return res.json({err_message : "User Already Exists"});
     }
 
     //************verify email with nodemailer***************
@@ -48,7 +63,7 @@ router.post("/register", async (req, res) => {
 
     // insert user
     insertUser(name, username, password);
-    res.send("register complite please login");
+    res.status(200).send({success : true});
     
     
 })

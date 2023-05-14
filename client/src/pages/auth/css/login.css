@@ -1,21 +1,30 @@
 
-.login-body{
+/* .login-body{
     background-color: #F4F4F4;
-}
+} */
 
-.login {
+/* .login {
     display: grid;
     margin: 100px auto; 
     width: 20%;
-}
+} */
 
-.login input {
+/* .login input {
     margin-bottom: 10px;
     background-color: #eaeaea;
 }
 
 .login button {
     background-color:royalblue;
+} */
+
+
+.login .form{
+    max-width: 300px;
+    margin: auto;
 }
-
-
+.login .form input, .form button{
+    border-radius: 3px;
+    box-shadow: none;
+    margin-bottom: 10px;
+}

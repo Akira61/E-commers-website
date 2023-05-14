@@ -9,7 +9,7 @@ export function language(phrase){
         "categories"  : "Categories",
         "items" : "Products",
         "members" : "Staff",
-        "statistics" : "Statistics",
+        "comments" : "Comments",
         "logs" : "Logs",
         "Edit Profile" : "Edit Profile",
         "Settings" : "Settings",

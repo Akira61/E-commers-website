@@ -13,9 +13,20 @@ router.post("/login",async (req, res) => {
     const {username} = req.body;
     const {password} = req.body;
 
+    //check if already logged in
+    if(req.session.auth){
+        return res.status(203).json({message : "Already logged in"});
+    }
+
     // check if inputs filled or not
     if(!username || !password){
        return res.status(203).json({message : "Please fill the inputs"});
+    }
+
+    //check valid email
+    const emailRegx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(!emailRegx.test(username)){
+        return res.status(500).json({message : "Please enter a correct email"})
     }
     
     const query = "SELECT * FROM users WHERE username=?";
@@ -39,9 +50,7 @@ router.post("/login",async (req, res) => {
             req.session.auth = true;// user authenticated
             
             console.log(req.session)
-            return res.status(200).json({
-                message : "user logged in successfully",
-            });
+            return res.status(200).json({success : true});
         }
 
         // password uncorrect

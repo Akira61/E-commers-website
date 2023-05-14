@@ -1,10 +1,11 @@
 const express = require("express");
 const {makeQuery} = require("../../server");
+const { loggedIn } = require("../../config/checkRole");
 
 const router = express.Router();
 
 
-router.delete("/logout/:userID", (req, res) => {
+router.delete("/logout/:userID",loggedIn, (req, res) => {
     const user = req.params.userID;
     makeQuery.query("SELECT user_id FROM users WHERE user_id=?",[user], (err, result) => {
         if(err) throw err;

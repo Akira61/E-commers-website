@@ -4,7 +4,12 @@ const express = require("express");
 
 module.exports.adminRole = function (req, res, next){
     const { role } = req.session;
-    
+    const { auth } = req.session;
+
+    //check if logged in
+    if(!auth){
+        return res.status(401).send("Please Login :(");
+    }
     if(role === 'user'){
         return res.status(401).send("you don't have a pormision :(");
     }

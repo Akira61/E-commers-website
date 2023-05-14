@@ -36,9 +36,9 @@ router.post("/product/new-product",loggedIn, adminRole,async(req, res) => {
     else{newCate = null};
  
     const newFileName = uuid() + fileData.name;
+    newFileName.split(" ").join("");
     const filePath = path.join(__dirname,'../../../../client/public/uploads/' + newFileName)
     fileData.mv(filePath);
-
     addProduct(productName, price, visible, productDesc, fileData, newFileName, rating,parseInt(memberId),newCate);
     res.json({ success : true});
 });

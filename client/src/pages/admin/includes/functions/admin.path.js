@@ -11,6 +11,6 @@ export const adminUrl = {
     dashboard           : "/admin/dashboard",
     manageStaff         : "/admin/staff/manage",
     productsDashboard   : "/admin/products",
-    categories          : "/admin/categories"
-
+    categories          : "/admin/categories",
+    comments            : "/admin/comments"
 }

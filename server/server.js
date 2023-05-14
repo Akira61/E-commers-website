@@ -65,7 +65,8 @@ app.get("/check-role", (req, res) => {
         }
     }
     console.log("^".repeat(30),role);
-    res.json({role,isAdmin});
+    //res.json({role,isAdmin});
+    res.json({role : req.session.auth, isAdmin});
 })
     
 //user's id
@@ -158,8 +159,13 @@ app.use("/", require("./routes/user/lastUsersAdded"));
     app.use("/", require("./routes/admin/categories/delete.category"))
 
 //
+ 
+//Comments
+    //get comments
+    app.use("/", require("./routes/admin/comments/comments.manage"));
 
-
+//
+ 
 app.listen(PORT, console.log(`listenning on port ${PORT}`));
 
 
