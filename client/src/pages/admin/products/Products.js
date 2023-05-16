@@ -358,16 +358,16 @@ export default function Products() {
       </div>
 </div>
 {/* Table */}
-      <div className='container'>
+      <div className='container row gap-4 mx-5 '>
         {data.map(element => (
           <div class="card" style={{width : '18rem', borderRadius: '5px'}}>
             <div class="card" onClick={() => editProduct(element.product_id)} style={{cursor:"pointer"}}>
-              <img src={`/uploads/${element.fileName}`} style={{borderRadius: '5px',height:'50%', objectFit:'cover'}}/>
+              <img src={`/uploads/${element.fileName}`} style={{borderRadius: '5px', objectFit:'cover'}}/>
               <div class="card-body">
                 <h5 class="card-title">{element.name}</h5>
                 <span>${element.price}</span>
                 <p class="card-text">{element.description}</p>
-
+                <span style={{color : "#AAA"}}>{element.updatedAt}</span>
                 {/* check visibility */}
                 {element.visible?
                   <span className='btn btn-success btn-sm'>

@@ -28,7 +28,7 @@ export default function Login() {
     }
 
     async function login(){
-        
+        // e.preventDefault();
         const response = await fetch("http://localhost:4000/login", {
           method: 'POST',
           credentials : "include", // to send HTTP only cookies
@@ -48,14 +48,14 @@ export default function Login() {
       <h1 className='text-center'>Login</h1>
       <div className='container login-page'>
         <div className='login'>
+          <div className='form my-5'>
           {/* Error messages */}
-          <span style={{color: 'red'}} >{response}</span>
-          <form className='form my-5'>
+          <span style={{color: 'red', display:'block'}} className='my-2'>{response}</span>
             Username <span className='text-danger'>*</span> <input id='username' type='text' className='form-control' placeholder='your@email.com' onChange={(e) => setUsername(e.target.value)}/>
             Password <span className='text-danger'>*</span> <input id='password' type='password'  className='form-control' placeholder='password' onChange={(e) => setPassword(e.target.value)}/>
             <button className='btn btn-primary btn-block' type='submit' onClick={() => login()}>Login</button>
             <div><Link to='/register' className='text-center'>or  signup</Link></div>
-          </form>
+          </div>
         </div>
       </div>
     </>

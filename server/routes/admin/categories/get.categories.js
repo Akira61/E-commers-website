@@ -26,7 +26,6 @@ router.get("/admin/categories/get-all", loggedIn,adminRole, async(req, res) => {
             ['id', defaultSort],
         ],
     });
-    console.log(categories);
 
     //send data
     res.status(200).json(categories);
@@ -52,7 +51,6 @@ router.get("/categories/visible/get-all", async(req, res) => {
         ],
         where : {Visible : 1}
     });
-    console.log(categories);
 
     //send data
     res.status(200).json(categories);
@@ -60,7 +58,6 @@ router.get("/categories/visible/get-all", async(req, res) => {
 
 router.get('/admin/categories/get-one', loggedIn, adminRole, async(req, res) => {
     const {id} = req.query;
-    console.log(id);
 
     const category = await Categories.findOne({where : {Category_id : id}});
 

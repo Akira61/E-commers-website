@@ -20,6 +20,8 @@ export default function Index() {
     <> 
       <Navbar />
       <br />
+      
+      
       <ProductBox data={data}/>
     </>
   )

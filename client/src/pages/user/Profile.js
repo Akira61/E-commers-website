@@ -111,7 +111,7 @@ export default function Profile() {
                             <div className='container d-flex align-items-center justify-content-center'>  
                                 <div className='row my-5'>
                                     <div className='mb-5'><h3 className='text-center'>Products</h3></div>
-                                    {products.map(item => (
+                                    {products.length > 0? products.map(item => (
                                         <div className="card mx-3 my-3 col-8 col-lg-4 col-xl-5" style={{width : '18rem', borderRadius: '5px'}}>
                                             <img className="card-img-top" src={`/uploads/${item.fileName}`} alt="image" style={{objectFit : 'cover'}}/>
                                             <div className="card-body py-2">
@@ -122,7 +122,7 @@ export default function Profile() {
                                             </div>
                                             </div>
                                         </div>
-                                    ))}
+                                    )) : <p className='text-center'>You Didn't Post Anything</p>}
                                </div>
                             
                         </div> 
@@ -135,7 +135,7 @@ export default function Profile() {
                             </div>
                             <div className='panel-body'>
                             <ul className='list-unstyled latest-users'>
-                                {comments.map(comment => (
+                                {comments.length > 0 ? comments.map(comment => (
                                 <div className='comment-box'>
                                     <span className=' comment-name'><FontAwesomeIcon icon={faUser}/> {comment.name}</span>
                                     <a className='button btn btn-link float-start  float-end btn-sm'>
@@ -146,7 +146,7 @@ export default function Profile() {
                                     </div>
                                      
                                 </div>
-                                ))}
+                                )) : <p className='text-center'>No Comments Found</p>}
                             </ul>
                             
                             </div>

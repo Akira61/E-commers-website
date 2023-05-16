@@ -10,8 +10,7 @@ export default function Sections() {
     console.log(section_name);
 
     const [product, setProduct] = useState([]);
-    useEffect(() => {
-        
+    useEffect((e) => {
         //get category's products
         cateProducts()
         async function cateProducts(){
@@ -24,7 +23,8 @@ export default function Sections() {
   return (
     <>
         <Navbar_ />
-      <ProductBox data={product}/>
+        {product.length >0 ?<ProductBox data={product}/> : <p className='text-center py-5' style={{fontSize:'20px'}}>No Product Posted Yet</p>}
+      {/* <ProductBox data={product}/> */}
     </>
   )
 }

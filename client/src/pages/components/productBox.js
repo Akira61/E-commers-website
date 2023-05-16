@@ -48,6 +48,7 @@ export default function ProductBox({data}) {
                     // </div>
 
                       <div className="card mx-3 my-3 col-8 col-lg-4 col-xl-5" style={{width : '18rem', borderRadius: '5px'}}>
+                        <a style={{textDecoration :'none', color : 'black'}} href={item.product_id}>
                         <img className="card-img-top" src={`/uploads/${item.fileName}`} alt="image" style={{objectFit : 'cover'}}/>
                         <div className="card-body py-2">
                           <h5 className="card-title">{item.name}</h5>
@@ -56,6 +57,7 @@ export default function ProductBox({data}) {
                             <div className="card-text">{item.price} ر.س </div>
                           </div>
                         </div>
+                        </a>
                     </div>
                   
                 )}

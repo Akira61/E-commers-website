@@ -68,7 +68,7 @@ export default function Staff_manage() {
         </div>
 
       {/* Table */}
-      <div className='container manage-container'>
+      <div className='container manage-container '>
 
         {/* Members Table */}
         <div className='table-responsive'>

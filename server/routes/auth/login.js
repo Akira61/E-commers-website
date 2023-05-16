@@ -31,9 +31,8 @@ router.post("/login",async (req, res) => {
     
     const query = "SELECT * FROM users WHERE username=?";
     makeQuery.query(query,[username], async(err, result) => {
-        if (err) console.log(err)
+        if (err) throw err;
 
-        console.log(result);
         // if length == 0  user dosen't existes
         if(result.length < 1){
             return res.status(404).json({message : "unvalid username"});
@@ -49,7 +48,7 @@ router.post("/login",async (req, res) => {
             req.session.role = result[0].role; // setting the role for user to be 'user'
             req.session.auth = true;// user authenticated
             
-            console.log(req.session)
+            console.log("user logged in successfully");
             return res.status(200).json({success : true});
         }
 

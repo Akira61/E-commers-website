@@ -6,12 +6,14 @@ import Staff_manage from './staff/manage';
 import { adminUrl } from './includes/functions/admin.path';
 import ManageCategories from './categories/manage.categories';
 import ManageComment from './comments/manageComment';
+import NewProduct from './products/NewProduct';
 
 
 export default [
   <Route path={adminUrl.dashboard} element={<Dashboard />}/>,
   <Route path={adminUrl.manageStaff} element={<Staff_manage />} />,
   <Route path={adminUrl.productsDashboard}  element={<Products />}/>,
+  <Route path="/newProduct" element={<NewProduct />} />,
   <Route path={adminUrl.categories}  element={<ManageCategories />} />,
   <Route path={adminUrl.comments}  element={<ManageComment />} />
 ];

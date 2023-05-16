@@ -10,6 +10,7 @@ import admin_routes from './pages/admin/routes';
 import Edit_profile from './pages/user/edit.profile';
 import Sections from './pages/sections';
 import Profile from './pages/user/Profile';
+import Item from './pages/item';
 
 export default function Router() {
   return (
@@ -22,6 +23,7 @@ export default function Router() {
         <Route path='/login' element={<Login />}/>
         <Route path='/edit-profile' element={<Edit_profile />} />
         <Route path='/section/:section_name' element={<Sections />}/>
+        <Route path='/:productId' element={<Item />} />
         <Route path='/profile' element={<Profile />}/>
       </Routes>
     </>
