@@ -1,4 +1,0 @@
-
-secure the website from csrf attack
-prevent sql injection
-general website security
